@@ -1,6 +1,8 @@
 import pygame
 import ImageUtil
 from Constants import *
+import Map
+import Build
 
 icons = []
 
@@ -12,12 +14,12 @@ def initUI(functionPause):
     global icons
     loadImages()
 
-    # (imagename, id, (xpos, ypos), onClickFunction, isToggleable, isToggled)
+    # (imagename, id, (xpos, ypos), onClickFunction, isToggleable, isToggled, function parameter)
 
-    icons.append(["menu-pause", 0, (0,0), functionPause, True, False])
-    icons.append(["menu-city", 1, (UI_ICON_SIZE*1, 0), openMenu, False, False])
-    icons.append(["menu-company",2,  (UI_ICON_SIZE*2, 0), openMenu, False, False])
-    icons.append(["menu-build-road", 3, (UI_ICON_SIZE*3, 0), None, False, False])
+    icons.append(["menu-pause", 0, (0,0), functionPause, True, False, None])
+    icons.append(["menu-city", 1, (UI_ICON_SIZE*1, 0), openMenu, False, False, 1])
+    icons.append(["menu-company",2,  (UI_ICON_SIZE*2, 0), openMenu, False, False, 2])
+    icons.append(["menu-build-road", 3, (UI_ICON_SIZE*3, 0), setBuildMode, True, False, BUILD_MODE_ROAD])
 
 def loadImages():
     ImageUtil.create_image("menu-pause", "res/menu/menu-pause.png", False)
@@ -41,6 +43,7 @@ def render(screen):
                     screen.blit(rect, (i[2][0], i[2][1]))
 
 
+
 def mouseClick(x,y):
     for i in icons:
         if(x > i[2][0] and x < i[2][0] + UI_ICON_SIZE):
@@ -48,13 +51,23 @@ def mouseClick(x,y):
                 if(i[4] == True):
                     i[5] = not i[5]
 
-                if(i[3] == openMenu):
-                    i[3](i[1])
+                if(i[3] == openMenu or i[3] == setBuildMode):
+                    i[3](i[6])
                     return
+
                 i[3]()
                 return
 
-                
+
+
+def setBuildMode(modeID):
+    if(modeID == Map.buildMode):
+        Map.buildMode = 0
+        Build.buildMode = 0
+    else:
+        Map.buildMode = modeID
+        Build.buildMode = modeID
+
 
 def openMenu(index):
     if(index == 2):

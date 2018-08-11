@@ -13,6 +13,9 @@ Zoom = 1
 MAP = None
 
 
+buildMode = 0
+
+
 pollution = 0
 
 
@@ -45,6 +48,7 @@ def render(screen):
     global scrollX
     global scrollY
     global Zoom
+    global buildMode
     
     #--------------------------------  TILE RENDERING   -------------------------------------
 
@@ -59,11 +63,11 @@ def render(screen):
 
                 screen.blit(pygame.transform.scale(image, (int(TILE_WIDTH*Zoom), int(TILE_HEIGHT*Zoom))), (posX, posY-TILE_HEIGHT*Zoom/2))
                 
-                    
-                pygame.draw.line(screen, color, (posX,posY), (posX + TILE_WIDTH*Zoom/2, posY - TILE_HEIGHT*Zoom/2))
-                pygame.draw.line(screen, color, (posX+TILE_WIDTH*Zoom/2, posY-TILE_HEIGHT*Zoom/2), (posX+TILE_WIDTH*Zoom,posY))
-                pygame.draw.line(screen, color, (posX+TILE_WIDTH*Zoom,posY), (posX+TILE_WIDTH*Zoom/2,posY+TILE_HEIGHT*Zoom/2))
-                pygame.draw.line(screen, color, (posX+TILE_WIDTH*Zoom/2,posY+TILE_HEIGHT*Zoom/2),(posX,posY))
+                if(buildMode != 0):
+                    pygame.draw.line(screen, color, (posX,posY), (posX + TILE_WIDTH*Zoom/2, posY - TILE_HEIGHT*Zoom/2))
+                    pygame.draw.line(screen, color, (posX+TILE_WIDTH*Zoom/2, posY-TILE_HEIGHT*Zoom/2), (posX+TILE_WIDTH*Zoom,posY))
+                    pygame.draw.line(screen, color, (posX+TILE_WIDTH*Zoom,posY), (posX+TILE_WIDTH*Zoom/2,posY+TILE_HEIGHT*Zoom/2))
+                    pygame.draw.line(screen, color, (posX+TILE_WIDTH*Zoom/2,posY+TILE_HEIGHT*Zoom/2),(posX,posY))
 
     #-------------------------------------------------------------------------------------------
 
@@ -79,10 +83,11 @@ def render(screen):
     hoverPosX = ((mouseX * TILE_WIDTH*Zoom / 2) + (mouseY * TILE_WIDTH*Zoom / 2) - scrollX)*Zoom
     hoverPosY = ((mouseY * TILE_HEIGHT*Zoom / 2) - (mouseX * TILE_HEIGHT*Zoom / 2) - scrollY)*Zoom
 
-    pygame.draw.line(screen, (0,0,255), (hoverPosX,hoverPosY), (hoverPosX + TILE_WIDTH*Zoom/2, hoverPosY - TILE_HEIGHT*Zoom/2))
-    pygame.draw.line(screen, (0,0,255), (hoverPosX+TILE_WIDTH*Zoom/2, hoverPosY-TILE_HEIGHT*Zoom/2), (hoverPosX+TILE_WIDTH*Zoom,hoverPosY))
-    pygame.draw.line(screen, (0,0,255), (hoverPosX+TILE_WIDTH*Zoom,hoverPosY), (hoverPosX+TILE_WIDTH*Zoom/2,hoverPosY+TILE_HEIGHT*Zoom/2))
-    pygame.draw.line(screen, (0,0,255), (hoverPosX+TILE_WIDTH*Zoom/2,hoverPosY+TILE_HEIGHT*Zoom/2),(hoverPosX,hoverPosY))
+    if(buildMode != 0):
+        pygame.draw.line(screen, (0,0,255), (hoverPosX,hoverPosY), (hoverPosX + TILE_WIDTH*Zoom/2, hoverPosY - TILE_HEIGHT*Zoom/2))
+        pygame.draw.line(screen, (0,0,255), (hoverPosX+TILE_WIDTH*Zoom/2, hoverPosY-TILE_HEIGHT*Zoom/2), (hoverPosX+TILE_WIDTH*Zoom,hoverPosY))
+        pygame.draw.line(screen, (0,0,255), (hoverPosX+TILE_WIDTH*Zoom,hoverPosY), (hoverPosX+TILE_WIDTH*Zoom/2,hoverPosY+TILE_HEIGHT*Zoom/2))
+        pygame.draw.line(screen, (0,0,255), (hoverPosX+TILE_WIDTH*Zoom/2,hoverPosY+TILE_HEIGHT*Zoom/2),(hoverPosX,hoverPosY))
 
     #---------------------------------------------------------------------------------------------
     
