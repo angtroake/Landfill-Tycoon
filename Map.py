@@ -3,6 +3,7 @@ import csv
 from Constants import *
 import pygame
 import ImageUtil
+import json
 
 scrollX = 0
 scrollY = 0
@@ -11,7 +12,8 @@ Zoom = 1
 
 
 MAP = None
-
+TileData = None
+TILES = {}
 
 buildMode = 0
 
@@ -33,15 +35,22 @@ def loadGMap():
         GMAP[0][0] = '99'
 
 
+def loadTileData():
+    global TileData
+    global TILES
+    with open("maps/tile.json") as jsonFile:
+        TileData = json.load(jsonFile)
+        for tile in TileData:
+            TILES[TileData[tile]["name"]] = str(TileData[tile]["id"])
+        
+
+
 def getTileImage(x,y):
     global MAP
+    global TileData
     val = MAP[x][y]
-    if(val == '0'):
-        return ImageUtil.get_image("water")
-    elif(val == '1'):
-        return ImageUtil.get_image("grass")
-    elif(val == '2'):
-        return ImageUtil.get_image("road")
+    if(val in TileData):
+        return ImageUtil.get_image(TileData[val]["image-name"])
     else:
         return ImageUtil.get_image("temp")
 

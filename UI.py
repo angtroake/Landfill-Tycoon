@@ -20,12 +20,18 @@ def initUI(functionPause):
     icons.append(["menu-city", 1, (UI_ICON_SIZE*1, 0), openMenu, False, False, 1])
     icons.append(["menu-company",2,  (UI_ICON_SIZE*2, 0), openMenu, False, False, 2])
     icons.append(["menu-build-road", 3, (UI_ICON_SIZE*3, 0), setBuildMode, True, False, BUILD_MODE_ROAD])
+    icons.append(["menu-build-landfill", 4, (UI_ICON_SIZE*4, 0), setBuildMode, True, False, BUILD_MODE_LANDFILL])
+    icons.append(["menu-trucks", 5, (UI_ICON_SIZE*5, 0), openMenu, False, True, 5])
+    
 
 def loadImages():
     ImageUtil.create_image("menu-pause", "res/menu/menu-pause.png", False)
     ImageUtil.create_image("menu-city", "res/menu/menu-city.png", False)
     ImageUtil.create_image("menu-build-road", "res/menu/menu-build-road.png", False)
     ImageUtil.create_image("menu-company", "res/menu/menu-company.png", False)
+    ImageUtil.create_image("menu-build-landfill", "res/menu/menu-landfill.png", False)
+    ImageUtil.create_image("menu-trucks", "res/menu/menu-truck.png", False)
+    
     
 
 
@@ -53,10 +59,11 @@ def mouseClick(x,y):
 
                 if(i[3] == openMenu or i[3] == setBuildMode):
                     i[3](i[6])
-                    return
+                    return True
 
                 i[3]()
-                return
+                return True
+    return False
 
 
 

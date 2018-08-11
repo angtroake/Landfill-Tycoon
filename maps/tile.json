@@ -1,0 +1,37 @@
+{
+    "0":{
+        "name": "water",
+        "id": 0,
+        "image-name": "water",
+        "is-user-made": false
+    },
+    "1": {
+        "name": "grass",
+        "id": 1,
+        "image-name": "grass",
+        "is-user-made": false
+    },
+    "2": {
+        "name": "road",
+        "id": 2,
+        "image-name": "road",
+        "is-user-made": false
+    },
+
+
+
+    "22": {
+        "name": "user-road",
+        "id": 22,
+        "image-name": "road",
+        "is-user-made": true
+
+    },
+    "23": {
+        "name": "landfill",
+        "id": "23",
+        "image-name": "landfill",
+        "is-user-made": true
+    }
+
+}

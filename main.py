@@ -23,10 +23,12 @@ ImageUtil.create_image("grass", "res/tile/tile-grass.png")
 ImageUtil.create_image("road", "res/tile/tile-road.png")
 ImageUtil.create_image("water", "res/tile/tile-water.png")
 ImageUtil.create_image("temp", "res/tile/tile-template.png")
+ImageUtil.create_image("landfill", "res/tile/tile-template.png")
 
 
 Map.loadMap()
 Map.loadGMap()
+Map.loadTileData()
 City.maptest()
 
 
@@ -56,8 +58,13 @@ while not done:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouseX = pygame.mouse.get_pos()[0]
             mouseY = pygame.mouse.get_pos()[1]
-            UI.mouseClick(mouseX, mouseY)
-            Build.onMouseClick(mouseX, mouseY)
+            uiclick = UI.mouseClick(mouseX, mouseY)
+            if(not uiclick):
+                Build.onMouseClick(mouseX, mouseY)
+        elif event.type == pygame.MOUSEBUTTONUP:
+            mouseX = pygame.mouse.get_pos()[0]
+            mouseY = pygame.mouse.get_pos()[1]
+            Build.onMouseRelease(mouseX, mouseY)
 
             """if(event.button == 4):
                 if(Zoom > 0.5):

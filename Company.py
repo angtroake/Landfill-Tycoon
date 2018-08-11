@@ -1,4 +1,4 @@
-MONEY = 10000
+Money = 10000
 Rating = 0
 Name = "Dump Dumperino"
 
@@ -8,4 +8,4 @@ def tick():
 
 
 def render(screen):
-    
+    None
