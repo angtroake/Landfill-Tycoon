@@ -76,7 +76,7 @@ def render(screen):
                 #renders tile to screen
                 screen.blit(pygame.transform.scale(image, (int(TILE_WIDTH*Zoom), int(TILE_HEIGHT*Zoom))), (posX, posY-TILE_HEIGHT*Zoom/2))
                 #render build priority
-                bupr = font.render(str(GMAP[cellX][cellY]), True, (0, 0, 0))
+                #bupr = font.render(str(GMAP[cellX][cellY]), True, (0, 0, 0))
                 #screen.blit(bupr, (posX,posY))
                 
                 #if in build mode enables the grid
