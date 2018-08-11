@@ -14,6 +14,18 @@
     "2": {
         "name": "road",
         "id": 2,
+        "image-name": "grass",
+        "is-user-made": false
+    },
+    "10": {
+        "name": "house",
+        "id": 10,
+        "image-name": "house",
+        "is-user-made": false
+    },
+    "20": {
+        "name": "road",
+        "id": 20,
         "image-name": "road",
         "is-user-made": false
     },

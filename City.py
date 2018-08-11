@@ -43,6 +43,8 @@ def maptest():
                 btilesY.append(cellY)
 
     #randomly pick a tile from array
+    if(len(btilesX)-1 <= 0):
+        return
     seltilei = random.randint(0, len(btilesX)-1)
     seltileX = btilesX[seltilei]
     seltileY = btilesY[seltilei]
@@ -65,7 +67,7 @@ def maptest():
                 Map.MAP[surtiles[newtileX]][surtiles[newtileY]] = "10"
                 Map.GMAP[surtiles[newtileX]][surtiles[newtileY]] = "0"
             elif(Map.MAP[surtiles[newtileX]][surtiles[newtileY]] == "2"):
-                Map.MAP[surtiles[newtileX]][surtiles[newtileY]] = "2"
+                Map.MAP[surtiles[newtileX]][surtiles[newtileY]] = "20"
                 Map.GMAP[surtiles[newtileX]][surtiles[newtileY]] = "0"
             else:
                 Map.MAP[surtiles[newtileX]][surtiles[newtileY]] = "3"
