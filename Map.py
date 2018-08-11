@@ -23,7 +23,12 @@ def loadMap():
         MAP = list(reader)
         MAP[0][0] = '0'
 
-
+def loadMap():
+    with open("maps/map1/growth.csv") as csvmap:
+        reader = csv.reader(csvmap)
+        global GMAP
+        GMAP = list(reader)
+        GMAP[0][0] = '99'
 
 
 def getTileImage(x,y):
