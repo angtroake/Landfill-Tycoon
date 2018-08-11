@@ -3,6 +3,7 @@ import sys
 import ImageUtil
 import Map
 import Build
+import City
 import UI
 from Constants import *
 from pygame.locals import *
@@ -25,6 +26,8 @@ ImageUtil.create_image("temp", "res/tile/tile-template.png")
 
 
 Map.loadMap()
+Map.loadGMap()
+City.maptest()
 
 
 Zoom = 1

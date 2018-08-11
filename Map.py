@@ -18,7 +18,6 @@ buildMode = 0
 
 pollution = 0
 
-
 def loadMap():
     with open("maps/map1/Map.csv") as csvmap:
         reader = csv.reader(csvmap)
@@ -26,7 +25,12 @@ def loadMap():
         MAP = list(reader)
         MAP[0][0] = '0'
 
-
+def loadGMap():
+    with open("maps/map1/growth.csv") as csvmap:
+        reader = csv.reader(csvmap)
+        global GMAP
+        GMAP = list(reader)
+        GMAP[0][0] = '99'
 
 
 def getTileImage(x,y):
@@ -49,7 +53,7 @@ def render(screen):
     global scrollY
     global Zoom
     global buildMode
-    
+    font = pygame.font.Font(None, 30)
     #--------------------------------  TILE RENDERING   -------------------------------------
 
     for cellY in range(0,MAP_HEIGHT+1):
@@ -60,9 +64,13 @@ def render(screen):
             if(posX  > 0 and posX < screen.get_width() - 20 and posY > 0 and posY < screen.get_height()):
                 color = (100,100,100)
                 image = getTileImage(cellX, cellY)
-
+                #renders tile to screen
                 screen.blit(pygame.transform.scale(image, (int(TILE_WIDTH*Zoom), int(TILE_HEIGHT*Zoom))), (posX, posY-TILE_HEIGHT*Zoom/2))
+                #render build priority
+                bupr = font.render(str(GMAP[cellX][cellY]), True, (0, 0, 0))
+                #screen.blit(bupr, (posX,posY))
                 
+                #if in build mode enables the grid
                 if(buildMode != 0):
                     pygame.draw.line(screen, color, (posX,posY), (posX + TILE_WIDTH*Zoom/2, posY - TILE_HEIGHT*Zoom/2))
                     pygame.draw.line(screen, color, (posX+TILE_WIDTH*Zoom/2, posY-TILE_HEIGHT*Zoom/2), (posX+TILE_WIDTH*Zoom,posY))
