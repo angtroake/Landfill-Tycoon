@@ -80,7 +80,7 @@ def render(screen):
             posX = ((cellX * TILE_WIDTH / 2) + (cellY * TILE_WIDTH / 2) - scrollX)*Zoom
             posY = ((cellY * TILE_HEIGHT / 2) - (cellX * TILE_HEIGHT / 2) - scrollY)*Zoom
 
-            if(posX  > 0 and posX < screen.get_width() - 20 and posY > 0 and posY < screen.get_height()):
+            if(posX  > -80 and posX < screen.get_width() + 50 and posY > -50 and posY < screen.get_height() + 50):
                 color = (100,100,100)
                 image = getTileImage(cellX, cellY)
                 #renders tile to screen
