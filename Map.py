@@ -55,6 +55,15 @@ def getTileImage(x,y):
         return ImageUtil.get_image("temp")
 
 
+def getScreenPositionOfCoord(x,y):
+    global Zoom
+    global scrollX
+    global scrollY
+
+    posX = ((x * TILE_WIDTH / 2) + (y * TILE_WIDTH / 2) - scrollX)*Zoom
+    posY = ((y * TILE_HEIGHT / 2) - (x * TILE_HEIGHT / 2) - scrollY)*Zoom
+
+    return((posX,posY))
 
 
 def render(screen):
@@ -67,6 +76,7 @@ def render(screen):
 
     for cellY in range(0,MAP_HEIGHT+1):
         for cellX in range(0,MAP_WIDTH+1):
+            cellX = MAP_WIDTH-cellX
             posX = ((cellX * TILE_WIDTH / 2) + (cellY * TILE_WIDTH / 2) - scrollX)*Zoom
             posY = ((cellY * TILE_HEIGHT / 2) - (cellX * TILE_HEIGHT / 2) - scrollY)*Zoom
 

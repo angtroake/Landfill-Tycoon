@@ -1,6 +1,7 @@
 import Map
 from Constants import *
 import Company
+import pygame
 
 buildMode = 0
 
@@ -17,6 +18,33 @@ def onMouseClick(x,y):
         initRoadBuild(pos)
     elif buildMode == BUILD_MODE_LANDFILL:
         initLandfillBuild(pos)
+
+
+def render(screen):
+    global buildStart
+    if(buildStart[0] != None):
+        pos = pygame.mouse.get_pos()
+        pos = mousePosToCoord(pos[0], pos[1])
+        
+        selectorBoxTR = None
+        selectorBoxTL = None
+        selectorBoxBR = None
+        selectorBoxBL = None
+    
+        if(buildMode == BUILD_MODE_LANDFILL):
+            color = (255,255,255)
+            if(abs(pos[0]-buildStart[0]) +1 < 3 and abs(pos[0]-buildStart[0])+1 < 3):
+                color = (255,0,0)
+            selectorBoxTL = Map.getScreenPositionOfCoord(min(pos[0], buildStart[0]), min(pos[1], buildStart[1]))
+            selectorBoxTR  = Map.getScreenPositionOfCoord(max(pos[0], buildStart[0])+1, min(pos[1], buildStart[1]))
+            selectorBoxBR = Map.getScreenPositionOfCoord(max(pos[0], buildStart[0]) +1, max(pos[1], buildStart[1]) + 1)
+            selectorBoxBL = Map.getScreenPositionOfCoord(min(pos[0], buildStart[0]), max(pos[1], buildStart[1])+1)
+            pygame.draw.line(screen, color, selectorBoxTL, selectorBoxTR)
+            pygame.draw.line(screen, color, selectorBoxTR, selectorBoxBR)
+            pygame.draw.line(screen, color, selectorBoxBR, selectorBoxBL)
+            pygame.draw.line(screen, color, selectorBoxBL, selectorBoxTL)
+            
+            
         
 
 
@@ -59,7 +87,7 @@ def mousePosToCoord(x,y):
 
     x2d = ((hoverPosX+scrollX)-2*(hoverPosY+scrollY))/TILE_WIDTH
     y2d = ((hoverPosY+scrollY)/TILE_HEIGHT + (hoverPosX+scrollX)/TILE_WIDTH)
-    return (int(x2d), int(y2d))
+    return [int(x2d), int(y2d)]
 
 
 

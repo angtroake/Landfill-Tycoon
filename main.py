@@ -103,6 +103,7 @@ while not done:
 
 
     Map.render(screen)
+    Build.render(screen)
     UI.render(screen)
     
     fps = font.render(str(int(clock.get_fps())), True, (0, 0, 0))
