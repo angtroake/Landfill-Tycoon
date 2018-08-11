@@ -26,7 +26,7 @@ def loadMap():
         MAP = list(reader)
         MAP[0][0] = '0'
 
-def loadMap():
+def loadGMap():
     with open("maps/map1/growth.csv") as csvmap:
         reader = csv.reader(csvmap)
         global GMAP
