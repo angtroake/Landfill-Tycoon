@@ -26,6 +26,8 @@ ImageUtil.create_image("temp", "res/tile/tile-template.png")
 
 
 Map.loadMap()
+Map.scrollX = 1000
+Map.scrollY = -200
 Map.loadGMap()
 City.maptest()
 
@@ -89,8 +91,8 @@ while not done:
     screen.blit(background, (0,0))
 
 
-    if(isPaused == True):
-        None
+    if(isPaused == False):
+        City.maptest()
 
 
     Map.render(screen)
