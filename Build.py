@@ -103,20 +103,21 @@ def initLandfillBuild(pos):
     global buildStart
     if(pos[0] >= 0 and pos[0] <= MAP_WIDTH and pos[1] >= 0 and pos[1] <= MAP_HEIGHT):
         buildStart = [pos[0], pos[1]]
+        
 
 def handleBuildLandfill(pos):
     mapInstance = Map.MAP
     global buildStart
     if(buildStart[0] != None):
-        landfillwidth = pos[0]- buildStart[0]
+        landfillwidth = pos[0] - buildStart[0]
         landfillheight = pos[1] - buildStart[1]
-        landfillArea = landfillwidth*landfillheight
+        landfillArea = abs(landfillwidth*landfillheight)
 
         canBuild = True
         ListBlocks = []
 
         if(landfillArea*COST_OF_LANDFILL <= Company.Money):
-            if(landfillwidth >= 3 and landfillwidth >= 3):
+            if(abs(landfillwidth)+1 >= 3 and abs(landfillheight)+1 >= 3):
                 for x in range(min(buildStart[0], buildStart[0]+landfillwidth), max(buildStart[0]+1, buildStart[0]+landfillwidth+1)):
                     for y in range(min(buildStart[1], buildStart[1]+landfillheight),max(buildStart[1]+1, buildStart[1]+landfillheight+1)):
                         if(mapInstance[x][y] not in VALID_CONSTRUCTION_SPOTS):
@@ -128,6 +129,8 @@ def handleBuildLandfill(pos):
             for block in ListBlocks:
                 mapInstance[block[0]][block[1]] = Map.TILES["landfill"]
             Company.Money -= landfillArea*COST_OF_LANDFILL
+
+        buildStart[0] = None
 
 
 
