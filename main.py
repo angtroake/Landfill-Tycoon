@@ -22,13 +22,26 @@ ImageUtil.create_image("road", "res/tile/tile-road.png")
 ImageUtil.create_image("water", "res/tile/tile-water.png")
 ImageUtil.create_image("temp", "res/tile/tile-template.png")
 
-UI.initUI()
 
 Map.loadMap()
 
 
 Zoom = 1
 ZoomTick = 0
+
+isPaused = False
+
+
+
+
+
+def togglePauseGame():
+    global isPaused
+    isPaused = not isPaused
+
+
+UI.initUI(togglePauseGame)
+
 
 
 while not done:
@@ -37,14 +50,16 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            if(event.button == 4):
+            UI.mouseClick(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+
+            """if(event.button == 4):
                 if(Zoom > 0.5):
                     Zoom -= 0.5
             elif(event.type == 5):
                 if(Zoom < 2):
                     Zoom += 0.5
             print(Zoom)
-            Map.Zoom = Zoom
+            Map.Zoom = Zoom"""
 
 
     keys = pygame.key.get_pressed()
@@ -67,14 +82,14 @@ while not done:
     screen.blit(background, (0,0))
 
 
+    if(isPaused == True):
+        None
+
 
     Map.render(screen)
     UI.render(screen)
-
-
     fps = font.render(str(int(clock.get_fps())), True, (0, 0, 0))
     screen.blit(fps, (50,50))
-
     pygame.display.flip()
 
     clock.tick(60)
