@@ -1,13 +1,16 @@
 import pygame
 import ImageUtil
+import Company
 from Constants import *
 import Map
 import Build
 
 icons = []
+activeIcon = None
 
 
 isMenuCompanyOpen = False
+
 
 
 def initUI(functionPause):
@@ -38,15 +41,19 @@ def loadImages():
 
 def render(screen):
     global icons
+    global activeIcon
+    font = pygame.font.Font(None, 30)
     for i in icons:
         if(i != None):
             screen.blit(ImageUtil.get_image(i[0]), (i[2][0], i[2][1]))
-            if(i[4] == True):
-                if(i[5] == True):
-                    rect = pygame.Surface((UI_ICON_SIZE,UI_ICON_SIZE))
-                    rect.set_alpha(100)
-                    rect.fill((0,0,0))
-                    screen.blit(rect, (i[2][0], i[2][1]))
+            if(activeIcon == i):
+                rect = pygame.Surface((UI_ICON_SIZE,UI_ICON_SIZE))
+                rect.set_alpha(100)
+                rect.fill((0,0,0))
+                screen.blit(rect, (i[2][0], i[2][1]))
+
+    moneytext = font.render(str(Company.Money) + "$", True, (0, 0, 0))
+    screen.blit(moneytext, (50,screen.get_height() - 50))
 
 
 
@@ -57,8 +64,11 @@ def mouseClick(x,y):
                 if(i[4] == True):
                     i[5] = not i[5]
 
-                if(i[3] == openMenu or i[3] == setBuildMode):
+                if(i[3] == openMenu):
                     i[3](i[6])
+                    return True
+                if(i[3] == setBuildMode):
+                    i[3](i[6], i)
                     return True
 
                 i[3]()
@@ -67,11 +77,14 @@ def mouseClick(x,y):
 
 
 
-def setBuildMode(modeID):
-    if(modeID == Map.buildMode):
+def setBuildMode(modeID, icon):
+    global activeIcon
+    if(activeIcon == icon):
+        activeIcon = None
         Map.buildMode = 0
         Build.buildMode = 0
     else:
+        activeIcon = icon
         Map.buildMode = modeID
         Build.buildMode = modeID
 

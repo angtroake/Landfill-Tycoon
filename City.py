@@ -49,8 +49,8 @@ def maptest():
     #add surrounding 4 tiles to list
     surtiles = getSurroundingtiles(seltileX,seltileY)
 
-    print("Selected tile:" + str(seltileX) + "," + str(seltileY))
-    print(" 1:" + str(surtiles[2]) + " 2:" + str(surtiles[12]) +" 3:" + str(surtiles[22]) +" 4:" + str(surtiles[32]))
+    #print("Selected tile:" + str(seltileX) + "," + str(seltileY))
+    #print(" 1:" + str(surtiles[2]) + " 2:" + str(surtiles[12]) +" 3:" + str(surtiles[22]) +" 4:" + str(surtiles[32]))
     #check if all the surrounding tiles are currently built on and if they are set the selected tile to 00
     for i in range(0,3):
         if(surtiles[i*10+2] == "0" or surtiles[i*10+2] == "00" or surtiles[i*10+2] == "99"):
