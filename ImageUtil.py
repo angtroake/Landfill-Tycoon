@@ -8,6 +8,7 @@ def create_image(name, path, alpha = True):
     if(get_image(name) == None):
         good_path = path.replace('/', os.sep).replace('\\', os.sep)
         image = pygame.image.load(good_path)
+        image = image.convert_alpha()
         if(alpha == False):
             image = image.convert()
         _loaded_images[name] = image
