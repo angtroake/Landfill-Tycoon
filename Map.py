@@ -7,12 +7,13 @@ import ImageUtil
 scrollX = 0
 scrollY = 0
 
+Zoom = 1
+
 
 MAP = None
 
 
-Zoom = 1
-
+pollution = 0
 
 
 def loadMap():

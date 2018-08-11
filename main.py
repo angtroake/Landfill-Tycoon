@@ -2,6 +2,8 @@ import pygame
 import sys
 import ImageUtil
 import Map
+import UI
+from Constants import *
 from pygame.locals import *
 
 
@@ -19,6 +21,8 @@ ImageUtil.create_image("grass", "res/tile/tile-grass.png")
 ImageUtil.create_image("road", "res/tile/tile-road.png")
 ImageUtil.create_image("water", "res/tile/tile-water.png")
 ImageUtil.create_image("temp", "res/tile/tile-template.png")
+
+UI.initUI()
 
 Map.loadMap()
 
@@ -45,21 +49,27 @@ while not done:
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_RIGHT]:
-        Map.scrollX += 20
+        if(Map.scrollX < MAX_SCROLL_X):
+            Map.scrollX += 20
     elif keys[pygame.K_LEFT]:
-        Map.scrollX -= 20
+        if(Map.scrollX > MIN_SCROLL_X):
+            Map.scrollX -= 20
     if keys[pygame.K_UP]:
-        Map.scrollY -= 20
+        if(Map.scrollY > MIN_SCROLL_Y):
+            Map.scrollY -= 20
     elif keys[pygame.K_DOWN]:
-        Map.scrollY += 20
+        if(Map.scrollY < MAX_SCROLL_Y):
+            Map.scrollY += 20
 
     background = pygame.Surface(screen.get_size())
     background.fill((85,85,85))
     background = background.convert()
     screen.blit(background, (0,0))
 
-    Map.render(screen)
 
+
+    Map.render(screen)
+    UI.render(screen)
 
 
     fps = font.render(str(int(clock.get_fps())), True, (0, 0, 0))
