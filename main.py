@@ -2,6 +2,7 @@ import pygame
 import sys
 import ImageUtil
 import Map
+import Build
 import UI
 from Constants import *
 from pygame.locals import *
@@ -50,7 +51,10 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            UI.mouseClick(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1])
+            mouseX = pygame.mouse.get_pos()[0]
+            mouseY = pygame.mouse.get_pos()[1]
+            UI.mouseClick(mouseX, mouseY)
+            Build.onMouseClick(mouseX, mouseY)
 
             """if(event.button == 4):
                 if(Zoom > 0.5):
@@ -88,6 +92,7 @@ while not done:
 
     Map.render(screen)
     UI.render(screen)
+    
     fps = font.render(str(int(clock.get_fps())), True, (0, 0, 0))
     screen.blit(fps, (50,50))
     pygame.display.flip()

@@ -90,12 +90,7 @@ def render(screen):
         pygame.draw.line(screen, (0,0,255), (hoverPosX+TILE_WIDTH*Zoom/2,hoverPosY+TILE_HEIGHT*Zoom/2),(hoverPosX,hoverPosY))
 
     #---------------------------------------------------------------------------------------------
-    
-
-
 
 #TODO Adjust render limit when testing finished
-#TODO FIX CURSOR ON ZOOM
-            
+#TODO FIX CURSOR ON ZOOM     
 
-            
