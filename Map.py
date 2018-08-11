@@ -71,7 +71,7 @@ def render(screen):
     global scrollY
     global Zoom
     global buildMode
-    font = pygame.font.Font(None, 30)
+    #font = pygame.font.Font(None, 30)
     #--------------------------------  TILE RENDERING   -------------------------------------
 
     for cellY in range(0,MAP_HEIGHT+1):
@@ -90,7 +90,7 @@ def render(screen):
                     screen.blit(pygame.transform.scale(image, (int(TILE_WIDTH*Zoom), int(TILE_HEIGHT*Zoom))), (posX, posY-TILE_HEIGHT*Zoom/2))
                 #render build priority
                 #bupr = font.render(str(GMAP[cellX][cellY]), True, (0, 0, 0))
-                #screen.blit(bupr, (posX,posY))
+                #screen.blit(bupr, (posX-16,posY-16))
                 
                 #if in build mode enables the grid
                 if(buildMode != 0):
