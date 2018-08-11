@@ -84,7 +84,10 @@ def render(screen):
                 color = (100,100,100)
                 image = getTileImage(cellX, cellY)
                 #renders tile to screen
-                screen.blit(pygame.transform.scale(image, (int(TILE_WIDTH*Zoom), int(TILE_HEIGHT*Zoom))), (posX, posY-TILE_HEIGHT*Zoom/2))
+                if(MAP[cellX][cellY] == "10"):
+                    screen.blit(pygame.transform.scale(image, (int(TILE_WIDTH*Zoom), int(image.get_height()*Zoom))), (posX, (posY-image.get_height()+TILE_HEIGHT/2)*Zoom))
+                else:
+                    screen.blit(pygame.transform.scale(image, (int(TILE_WIDTH*Zoom), int(TILE_HEIGHT*Zoom))), (posX, posY-TILE_HEIGHT*Zoom/2))
                 #render build priority
                 #bupr = font.render(str(GMAP[cellX][cellY]), True, (0, 0, 0))
                 #screen.blit(bupr, (posX,posY))

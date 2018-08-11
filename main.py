@@ -20,6 +20,7 @@ clock = pygame.time.Clock()
 
 ImageUtil.create_image("test", "res/test.png")
 ImageUtil.create_image("grass", "res/tile/tile-grass.png")
+ImageUtil.create_image("house", "res/tile/tile-house.png")
 ImageUtil.create_image("road", "res/tile/tile-road.png")
 ImageUtil.create_image("water", "res/tile/tile-water.png")
 ImageUtil.create_image("temp", "res/tile/tile-template.png")
@@ -110,7 +111,7 @@ while not done:
     screen.blit(fps, (50,50))
     pygame.display.flip()
 
-    clock.tick(60)
+    clock.tick(240)
 
 pygame.quit()
 sys.exit()
