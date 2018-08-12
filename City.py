@@ -64,13 +64,13 @@ def maptest():
         newtileY = newtile*10+1
         if(surtiles[newtile*10+2] != "00" and surtiles[newtile*10+2] !="0" and surtiles[newtile*10+2] !="99"):
             if(Map.MAP[surtiles[newtileX]][surtiles[newtileY]] == "1"):
-                Map.MAP[surtiles[newtileX]][surtiles[newtileY]] = str(10+random.randint(0,2))
+                Map.setTile(surtiles[newtileX],surtiles[newtileY], str(10+random.randint(0,2)))
                 Map.GMAP[surtiles[newtileX]][surtiles[newtileY]] = "0"
             elif(Map.MAP[surtiles[newtileX]][surtiles[newtileY]] == "2"):
-                Map.MAP[surtiles[newtileX]][surtiles[newtileY]] = "20"
+                Map.setTile(surtiles[newtileX],surtiles[newtileY], "20")
                 Map.GMAP[surtiles[newtileX]][surtiles[newtileY]] = "0"
             else:
-                Map.MAP[surtiles[newtileX]][surtiles[newtileY]] = "3"
+                Map.setTile(surtiles[newtileX],surtiles[newtileY], "3")
                 Map.GMAP[surtiles[newtileX]][surtiles[newtileY]] = "0"
     surtilesInvalid = 0
     #put all tiles avalible to be built on into array

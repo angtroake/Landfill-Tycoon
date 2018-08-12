@@ -47,15 +47,19 @@ def loadPathFindingMap():
     global PATHMAP
     global MAP    
     PATHMAP = copy.deepcopy(MAP)
+    finalMap = copy.deepcopy(MAP)
 
     for x in range(0, len(PATHMAP)):
         for y in range(0, len(PATHMAP)):
             if(PATHMAP[x][y] == '20'):
                 PATHMAP[x][y] = '1'
+                finalMap[y][x] = '1'
             else:
                 PATHMAP[x][y] = '0'
+                finalMap[y][x] = '0'
+
+    PATHMAP = finalMap
             
-    print(PATHMAP)
 
 
 
@@ -107,6 +111,19 @@ def mousePosToCoord(x,y):
 
 
 
+def setTile(x, y, tileId):
+    global MAP
+    global PATHMAP
+    MAP[x][y] = str(tileId)
+    if(str(tileId) == '20' or str(tileId) == '22'):
+        PATHMAP[y][x] = '1'
+
+def getTile(x, y):
+    global MAP
+    return MAP[x][y]
+
+
+
 def render(screen):
     global scrollX
     global scrollY
@@ -134,6 +151,7 @@ def render(screen):
                         image = ImageUtil.get_image("temp")
 
                 if(image.get_height()!=TILE_HEIGHT):
+                    
                     screen.blit(pygame.transform.scale(image, (int(TILE_WIDTH*Zoom), int(image.get_height()*Zoom))), (posX, (posY-image.get_height()+TILE_HEIGHT/2)*Zoom))
                 else:
                     screen.blit(pygame.transform.scale(image, (int(TILE_WIDTH*Zoom), int(TILE_HEIGHT*Zoom))), (posX, posY-TILE_HEIGHT*Zoom/2))

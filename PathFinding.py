@@ -97,6 +97,7 @@ def getPath(start, end):
     start = grid.node(start[0], start[1])
     end = grid.node(end[0], end[1])
     path, runs = finder.find_path(start, end, grid)
+    print(grid.grid_str(path=path, start=start, end=end))
 
     return path
 
@@ -105,14 +106,13 @@ def getPath(start, end):
 
 def getNewRoadTarget():
     RoadMap = Map.PATHMAP
-    x = 1
-    y = 1
+    returns = [0,0]
         
-    while(RoadMap[x][y] != '1'):
-        x = random.randint(0, len(RoadMap[0])-1)
-        y = random.randint(0, len(RoadMap)-1)
-    
-    return [x,y]
+    while RoadMap[returns[0]][returns[1]] != '1' and RoadMap != None:
+        returns = random.choice([(j,i) for i, row in enumerate(RoadMap) for j, val in enumerate(row) if val=='1'])
+        print(returns)
+
+    return returns
 
 
 

@@ -50,7 +50,6 @@ def render(screen):
 
 def onMouseRelease(x,y):
     global buildStart
-    mapInstance = Map.MAP
     pos = mousePosToCoord(x,y)
 
     if(buildMode == BUILD_MODE_ROAD):
@@ -61,7 +60,6 @@ def onMouseRelease(x,y):
 
 
 def onMouseRightClick(x,y):
-    mapInstance = Map.MAP
     Zoom = Map.Zoom
     scrollX = Map.scrollX
     scrollY = Map.scrollY
@@ -96,7 +94,6 @@ def mousePosToCoord(x,y):
 #---------------------------------------- ROAD METHODS -----------------------------------------------------------------
 
 def initRoadBuild(pos):
-    mapInstance = Map.MAP
     global buildStart
     if(pos[0] >= 0 and pos[0] <= MAP_WIDTH and pos[1] >= 0 and pos[1] <= MAP_HEIGHT):
         buildStart = [pos[0], pos[1]]
@@ -104,7 +101,6 @@ def initRoadBuild(pos):
 
 
 def handleBuildRoad(pos):
-    mapInstance = Map.MAP
     global buildStart
     if(buildStart[0] != None):
         roadwidth = pos[0]- buildStart[0]
@@ -117,8 +113,8 @@ def handleBuildRoad(pos):
                 
                 for x in range(min(buildStart[0], buildStart[0]+roadwidth), max(buildStart[0]+1, buildStart[0]+roadwidth+1)):
                     for y in range(min(buildStart[1], buildStart[1]+roadheight),max(buildStart[1]+1, buildStart[1]+roadheight+1)):
-                        if(mapInstance[x][y] in VALID_CONSTRUCTION_SPOTS):
-                            mapInstance[x][y] = Map.TILES["user-road"]
+                        if(Map.getTile(x, y) in VALID_CONSTRUCTION_SPOTS):
+                            Map.setTile(x,y,Map.TILES["user-road"])
                             Company.Money -= COST_OF_ROAD
         buildStart[0] = None
         buildStart[1] = None
@@ -127,14 +123,12 @@ def handleBuildRoad(pos):
 
 
 def initLandfillBuild(pos):
-    mapInstance = Map.MAP
     global buildStart
     if(pos[0] >= 0 and pos[0] <= MAP_WIDTH and pos[1] >= 0 and pos[1] <= MAP_HEIGHT):
         buildStart = [pos[0], pos[1]]
         
 
 def handleBuildLandfill(pos):
-    mapInstance = Map.MAP
     global buildStart
     if(buildStart[0] != None):
         landfillwidth = pos[0] - buildStart[0]
@@ -148,14 +142,14 @@ def handleBuildLandfill(pos):
             if(abs(landfillwidth)+1 >= 3 and abs(landfillheight)+1 >= 3):
                 for x in range(min(buildStart[0], buildStart[0]+landfillwidth), max(buildStart[0]+1, buildStart[0]+landfillwidth+1)):
                     for y in range(min(buildStart[1], buildStart[1]+landfillheight),max(buildStart[1]+1, buildStart[1]+landfillheight+1)):
-                        if(mapInstance[x][y] not in VALID_CONSTRUCTION_SPOTS):
+                        if(Map.getTile(x,y) not in VALID_CONSTRUCTION_SPOTS):
                             canBuild = False
                             break
                         else:
                             ListBlocks.append((x,y))
         if canBuild:            
             for block in ListBlocks:
-                mapInstance[block[0]][block[1]] = Map.TILES["landfill"]
+                Map.setTile(block[0],block[1], Map.TILES["landfill"])
             Company.Money -= landfillArea*COST_OF_LANDFILL
 
         buildStart[0] = None
