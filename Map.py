@@ -4,6 +4,7 @@ from Constants import *
 import pygame
 import ImageUtil
 import json
+import copy
 
 scrollX = 0
 scrollY = 0
@@ -28,7 +29,6 @@ def loadMap():
         global MAP
         MAP = list(reader)
         MAP[0][0] = '0'
-    loadPathFindingMap(MAP)
     
 
 
@@ -40,11 +40,13 @@ def loadGMap():
         GMAP[0][0] = '99'
 
 
-def loadPathFindingMap(objMap):
+def loadPathFindingMap():
     global PATHMAP
-    PATHMAP = objMap
-    for(x in range(0, len(PATHMAP + 1))):
-        for(y in range(0, len(PATHMAP + 1))):
+    global MAP    
+    PATHMAP = copy.deepcopy(MAP)
+
+    for x in range(0, len(PATHMAP)):
+        for y in range(0, len(PATHMAP)):
             if(PATHMAP[x][y] == '1' or PATHMAP[x][y] == '0' or PATHMAP[x][y] == '10'):
                 PATHMAP[x][y] = '0'
             else:

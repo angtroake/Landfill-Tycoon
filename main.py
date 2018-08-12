@@ -30,11 +30,15 @@ ImageUtil.create_image("landfill", "res/tile/tile-template.png")
 
 
 Map.loadMap()
+Map.loadPathFindingMap()
 Map.scrollX = 1000
 Map.scrollY = -200
 Map.loadGMap()
 Map.loadTileData()
 City.maptest()
+
+PathFinding.initVehicleTypes()
+PathFinding.createVehicle(0)
 
 
 Zoom = 1
@@ -44,7 +48,7 @@ isPaused = False
 
 
 
-PathFinding.run()
+#PathFinding.run()
 
 
 
@@ -106,10 +110,12 @@ while not done:
 
     if(isPaused == False):
         City.maptest()
+        PathFinding.tick()
 
 
     Map.render(screen)
     Build.render(screen)
+    PathFinding.render(screen)
     UI.render(screen)
     
     fps = font.render(str(int(clock.get_fps())), True, (0, 0, 0))

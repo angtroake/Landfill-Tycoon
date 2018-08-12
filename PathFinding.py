@@ -3,18 +3,120 @@ from pathfinding.core.grid import Grid
 from pathfinding.finder.a_star import AStarFinder
 import csv
 import random
+import json
+import Map
 
 
-#    STRUCTURE:     [(currentCordX, currentCoordY)]
+
+#                                 0                    1          2           3          4        5        6
+#    STRUCTURE:     [(currentCordX, currentCoordY), typeID, targetPosNode, Capacity, AmountFill, path, pathindex]
 LiveVehicles = []
 
+#                           0       1
+#    STRUCTURE:     [id, (name, capacity)]
+VehicleTypes = {}
 
-def createVehicle():
-    LiveVehicles.append([])
+finder = AStarFinder()
+
+CurrentTick = 0
+MaxTick = 40
+
+
+def initVehicleTypes():
+    global VehicleTypes
+    with open("vehicle.json") as jsonFile:
+        tempData = json.load(jsonFile)
+        for val in tempData:
+            VehicleTypes[tempData[val]["id"]] = (tempData[val]["name"], tempData[val]["capacity"])
+
+
+def createVehicle(id):
+    global VehicleTypes
+    global LiveVehicles
+
+    startCoords = getNewRoadTarget()
+    randomTarget = getNewRoadTarget()
+
+    path = getPath(startCoords, randomTarget)
+
+
+    vehicle = [(startCoords[0], startCoords[1]), id, randomTarget, VehicleTypes[id][0], 0, path, 0]
+    LiveVehicles.append(vehicle)
 
 
 
-def getNewTarget():
+
+
+def tick():
+    global LiveVehicles
+    global CurrentTick
+    global MaxTick
+    if(CurrentTick >= MaxTick):
+        for vehicle in LiveVehicles:
+            currentpos = vehicle[0]
+            path = vehicle[5]
+            pathindex = vehicle[6]
+            endpos = vehicle[2]
+            print("Current Pos: " + str(currentpos) + "   End Pos: " + str(endpos) + "   Path Length: " + str(len(path)) + "   Path Index: " + str(pathindex))
+
+
+            if((currentpos[0] == endpos[0] and currentpos[1] == endpos[1]) or endpos[0] == None or len(path) <= 0 or pathindex >= len(path)):
+                print("NEW PATH")
+                vehicle[2] = getNewRoadTarget()
+                startpos = currentpos
+                vehicle[5] = getPath(startpos, endpos)
+                vehicle[6] = 0
+                continue
+
+            #vehicle[0] = [path[pathindex][0], path[pathindex][1]]
+            vehicle[0] = [path[pathindex][0], path[pathindex][1]]
+            vehicle[6] += 1
+
+        CurrentTick = 0
+    else:
+        CurrentTick += 1
+
+
+def render(screen):
+    global LiveVehicles
+    for vehicle in LiveVehicles:
+        currentpos = vehicle[0]
+        isoPos = Map.getScreenPositionOfCoord(currentpos[0], currentpos[1])
+        pygame.draw.rect(screen, (255,0,0), [isoPos[0]-25, isoPos[1]-25, 50, 50])
+
+
+
+
+
+def getPath(start, end):
+    RoadMap = Map.PATHMAP
+    global finder
+
+    grid = Grid(matrix = RoadMap)
+    start = grid.node(start[0], start[1])
+    end = grid.node(end[0], end[1])
+    path, runs = finder.find_path(start, end, grid)
+
+    return path
+
+
+
+
+def getNewRoadTarget():
+    RoadMap = Map.PATHMAP
+    end = [1,1]
+        
+    while(RoadMap[end[0]][end[1]] != '1'):
+        end = [random.randint(0, len(RoadMap[0]))-1, random.randint(0, len(RoadMap))-1]
+    
+    return end
+
+
+
+
+
+
+
 
 
 
