@@ -2,7 +2,10 @@
     "0": {
         "id": 0,
         "name": "Basic Truck",
-        "capacity": 10
-
+        "capacity": 10,
+        "image-name-TL": "truck1-TL",
+        "image-name-TR": "truck1-TR",
+        "image-name-BR": "truck1-BR",
+        "image-name-BL": "truck1-BL"
     }
 }

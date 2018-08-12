@@ -29,6 +29,10 @@ ImageUtil.create_image("road", "res/tile/tile-road.png")
 ImageUtil.create_image("water", "res/tile/tile-water.png")
 ImageUtil.create_image("temp", "res/tile/tile-template.png")
 ImageUtil.create_image("landfill", "res/tile/tile-template.png")
+ImageUtil.create_image("truck1-TL", "res/trucks/truck1/truck1TL.png")
+ImageUtil.create_image("truck1-TR", "res/trucks/truck1/truck1TR.png")
+ImageUtil.create_image("truck1-BL", "res/trucks/truck1/truck1BL.png")
+ImageUtil.create_image("truck1-BR", "res/trucks/truck1/truck1BR.png")
 
 
 Map.loadMap()
@@ -117,7 +121,7 @@ while not done:
 
     Map.render(screen)
     Build.render(screen)
-    PathFinding.render(screen)
+    #PathFinding.render(screen)
     UI.render(screen)
     
     fps = font.render(str(int(clock.get_fps())), True, (0, 0, 0))

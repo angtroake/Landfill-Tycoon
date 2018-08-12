@@ -5,6 +5,7 @@ import pygame
 import ImageUtil
 import json
 import copy
+import PathFinding
 
 scrollX = 0
 scrollY = 0
@@ -91,7 +92,7 @@ def getScreenPositionOfCoord(x,y):
     posX = ((x * TILE_WIDTH / 2) + (y * TILE_WIDTH / 2) - scrollX)*Zoom
     posY = ((y * TILE_HEIGHT / 2) - (x * TILE_HEIGHT / 2) - scrollY)*Zoom
 
-    return((posX,posY))
+    return([posX,posY])
 
 
 def mousePosToCoord(x,y):
@@ -155,6 +156,8 @@ def render(screen):
                     screen.blit(pygame.transform.scale(image, (int(TILE_WIDTH*Zoom), int(image.get_height()*Zoom))), (posX, (posY-image.get_height()+TILE_HEIGHT/2)*Zoom))
                 else:
                     screen.blit(pygame.transform.scale(image, (int(TILE_WIDTH*Zoom), int(TILE_HEIGHT*Zoom))), (posX, posY-TILE_HEIGHT*Zoom/2))
+
+
                 #render build priority
                 #bupr = font.render(str(GMAP[cellX][cellY]), True, (0, 0, 0))
                 #screen.blit(bupr, (posX-16,posY-16))
@@ -165,6 +168,12 @@ def render(screen):
                     pygame.draw.line(screen, color, (posX+TILE_WIDTH*Zoom/2, posY-TILE_HEIGHT*Zoom/2), (posX+TILE_WIDTH*Zoom,posY))
                     pygame.draw.line(screen, color, (posX+TILE_WIDTH*Zoom,posY), (posX+TILE_WIDTH*Zoom/2,posY+TILE_HEIGHT*Zoom/2))
                     pygame.draw.line(screen, color, (posX+TILE_WIDTH*Zoom/2,posY+TILE_HEIGHT*Zoom/2),(posX,posY))
+                
+
+                #render vehicle on tile if there is one
+                vehicle = PathFinding.tileHasVehicle(cellX, cellY)
+                if(vehicle != False):
+                    PathFinding.renderVehicle(vehicle, screen)
 
     #-------------------------------------------------------------------------------------------
 

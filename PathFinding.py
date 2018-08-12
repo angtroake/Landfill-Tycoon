@@ -5,15 +5,17 @@ import csv
 import random
 import json
 import Map
+import ImageUtil
+from Constants import *
 
 
 
-#                                 0                    1          2           3          4        5        6
-#    STRUCTURE:     [(currentCordX, currentCoordY), typeID, targetPosNode, Capacity, AmountFill, path, pathindex]
+#                                 0                    1          2           3          4        5        6        
+#    STRUCTURE:     [(currentCordX, currentCoordY), typeID, targetPosNode, Capacity, AmountFill, path, pathindex, ]
 LiveVehicles = []
 
-#                           0       1
-#    STRUCTURE:     [id, (name, capacity)]
+#                           0       1        2(0=TL,1=TR,2=BR,3=BL)
+#    STRUCTURE:     [id, (name, capacity, images)]
 VehicleTypes = {}
 
 finder = AStarFinder()
@@ -27,7 +29,8 @@ def initVehicleTypes():
     with open("vehicle.json") as jsonFile:
         tempData = json.load(jsonFile)
         for val in tempData:
-            VehicleTypes[tempData[val]["id"]] = (tempData[val]["name"], tempData[val]["capacity"])
+            images = (tempData[val]["image-name-TL"], tempData[val]["image-name-TR"], tempData[val]["image-name-BR"], tempData[val]["image-name-BL"])
+            VehicleTypes[tempData[val]["id"]] = (tempData[val]["name"], tempData[val]["capacity"], images)
 
 
 def createVehicle(id):
@@ -80,14 +83,57 @@ def tick():
 def render(screen):
     global LiveVehicles
     for vehicle in LiveVehicles:
-        currentpos = vehicle[0]
-        isoPos = Map.getScreenPositionOfCoord(currentpos[0], currentpos[1])
-        pygame.draw.rect(screen, (255,0,0), [isoPos[0]-25, isoPos[1]-25, 50, 50])
+        renderVehicle(vehicle, screen)
+
+
+
+def renderVehicle(vehicle, screen):
+    currentpos = vehicle[0]
+    images = VehicleTypes[vehicle[1]][2]
+    image = ImageUtil.get_image(images[3])
+    isoPos = Map.getScreenPositionOfCoord(currentpos[0], currentpos[1])
+    if(vehicle[6] < len(vehicle[5])):
+        nextpos = vehicle[5][vehicle[6]]
+        #pygame.draw.rect(screen, (255,0,0), [isoPos[0]-25, isoPos[1]-25, 50, 50])
+
+        if(nextpos[0] > currentpos[0]):
+            image = ImageUtil.get_image(images[1])
+        elif(nextpos[0] < currentpos[0]):
+            image = ImageUtil.get_image(images[3])
+        elif(nextpos[1] > currentpos[1]):
+            image = ImageUtil.get_image(images[2])
+        elif(nextpos[1] < currentpos[1]):
+            image = ImageUtil.get_image(images[0])
+        
+        isoPos[0] += (TILE_WIDTH/2 - image.get_width()/2)
+        isoPos[1] -= image.get_height()/2
+            
+    screen.blit(image, isoPos)
+
+
+"""
+returns vehicle if there is one in that tile
+if not it returns false
+"""
+def tileHasVehicle(x, y):
+    global LiveVehicles
+    for vehicle in LiveVehicles:
+        if(vehicle[0][0] == x and vehicle[0][1] == y):
+            return vehicle
+
+    return False
 
 
 
 
 
+#---------------------------------PATH FINDING FUNCTIONS-------------------------------------
+
+
+
+"""
+gets the path from start pos to end on PATHMAP. returns a list of positions (AKA move to this pos next)
+"""
 def getPath(start, end):
     RoadMap = Map.PATHMAP
     global finder
@@ -102,7 +148,9 @@ def getPath(start, end):
 
 
 
-
+"""
+Returns a random spot on PATHMAP where there is a road
+"""
 def getNewRoadTarget():
     RoadMap = Map.PATHMAP
     returns = [0,0]
@@ -121,7 +169,8 @@ def getNewRoadTarget():
 
 
 
-
+#--------- OLD CODE USED FOR TESTING
+"""
 def run():
     matrix = None
 
@@ -147,3 +196,4 @@ def run():
     print(grid.grid_str(path=path, start=start, end=end))
     print(path[0])
     print(path[1])
+"""
