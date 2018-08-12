@@ -23,6 +23,18 @@
         "image-name": "house",
         "is-user-made": false
     },
+    "11": {
+        "name": "house1",
+        "id": 10,
+        "image-name": "house1",
+        "is-user-made": false
+    },
+    "12": {
+        "name": "house2",
+        "id": 10,
+        "image-name": "house2",
+        "is-user-made": false
+    },
     "20": {
         "name": "road",
         "id": 20,

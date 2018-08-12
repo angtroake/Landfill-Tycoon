@@ -103,7 +103,7 @@ def render(screen):
                 color = (100,100,100)
                 image = getTileImage(cellX, cellY)
                 #renders tile to screen
-                if(MAP[cellX][cellY] == "10"):
+                if(image.get_height()!=TILE_HEIGHT):
                     screen.blit(pygame.transform.scale(image, (int(TILE_WIDTH*Zoom), int(image.get_height()*Zoom))), (posX, (posY-image.get_height()+TILE_HEIGHT/2)*Zoom))
                 else:
                     screen.blit(pygame.transform.scale(image, (int(TILE_WIDTH*Zoom), int(TILE_HEIGHT*Zoom))), (posX, posY-TILE_HEIGHT*Zoom/2))
