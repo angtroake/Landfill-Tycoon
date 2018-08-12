@@ -57,11 +57,10 @@ def tick():
             path = vehicle[5]
             pathindex = vehicle[6]
             endpos = vehicle[2]
-            print("Current Pos: " + str(currentpos) + "   End Pos: " + str(endpos) + "   Path Length: " + str(len(path)) + "   Path Index: " + str(pathindex))
+            #print("Current Pos: " + str(currentpos) + "   End Pos: " + str(endpos) + "   Path Length: " + str(len(path)) + "   Path Index: " + str(pathindex))
 
 
             if((currentpos[0] == endpos[0] and currentpos[1] == endpos[1]) or endpos[0] == None or len(path) <= 0 or pathindex >= len(path)):
-                print("NEW PATH")
                 vehicle[2] = getNewRoadTarget()
                 startpos = currentpos
                 vehicle[5] = getPath(startpos, vehicle[2])
@@ -97,7 +96,7 @@ def getPath(start, end):
     start = grid.node(start[0], start[1])
     end = grid.node(end[0], end[1])
     path, runs = finder.find_path(start, end, grid)
-    print(grid.grid_str(path=path, start=start, end=end))
+    #print(grid.grid_str(path=path, start=start, end=end))
 
     return path
 
@@ -110,7 +109,6 @@ def getNewRoadTarget():
         
     while RoadMap[returns[0]][returns[1]] != '1' and RoadMap != None:
         returns = random.choice([(j,i) for i, row in enumerate(RoadMap) for j, val in enumerate(row) if val=='1'])
-        print(returns)
 
     return returns
 
