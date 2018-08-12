@@ -64,8 +64,9 @@ def tick():
                 print("NEW PATH")
                 vehicle[2] = getNewRoadTarget()
                 startpos = currentpos
-                vehicle[5] = getPath(startpos, endpos)
+                vehicle[5] = getPath(startpos, vehicle[2])
                 vehicle[6] = 0
+                Map.testTruckEnd = endpos
                 continue
 
             #vehicle[0] = [path[pathindex][0], path[pathindex][1]]
@@ -104,12 +105,14 @@ def getPath(start, end):
 
 def getNewRoadTarget():
     RoadMap = Map.PATHMAP
-    end = [1,1]
+    x = 1
+    y = 1
         
-    while(RoadMap[end[0]][end[1]] != '1'):
-        end = [random.randint(0, len(RoadMap[0]))-1, random.randint(0, len(RoadMap))-1]
+    while(RoadMap[x][y] != '1'):
+        x = random.randint(0, len(RoadMap[0])-1)
+        y = random.randint(0, len(RoadMap)-1)
     
-    return end
+    return [x,y]
 
 
 

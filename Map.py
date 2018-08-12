@@ -11,6 +11,7 @@ scrollY = 0
 
 Zoom = 1
 
+font = None
 
 MAP = None
 PATHMAP = None
@@ -19,6 +20,8 @@ TileData = None
 TILES = {}
 
 buildMode = 0
+
+testTruckEnd = [None, None]
 
 
 pollution = 0
@@ -47,10 +50,12 @@ def loadPathFindingMap():
 
     for x in range(0, len(PATHMAP)):
         for y in range(0, len(PATHMAP)):
-            if(PATHMAP[x][y] == '1' or PATHMAP[x][y] == '0' or PATHMAP[x][y] == '10'):
-                PATHMAP[x][y] = '0'
-            else:
+            if(PATHMAP[x][y] == '20'):
                 PATHMAP[x][y] = '1'
+            else:
+                PATHMAP[x][y] = '0'
+            
+    print(PATHMAP)
 
 
 
@@ -85,11 +90,32 @@ def getScreenPositionOfCoord(x,y):
     return((posX,posY))
 
 
+def mousePosToCoord(x,y):
+    global Zoom
+    global scrollX
+    global scrollY
+
+    mouseY = int(((y+scrollY)/TILE_HEIGHT) + ((x+scrollX) / TILE_WIDTH))
+    mouseX = -int((-(x+scrollX)/TILE_WIDTH) + ((y+scrollY) / TILE_HEIGHT))
+
+    hoverPosX = ((mouseX * TILE_WIDTH*Zoom / 2) + (mouseY * TILE_WIDTH*Zoom / 2) - scrollX)*Zoom
+    hoverPosY = ((mouseY * TILE_HEIGHT*Zoom / 2) - (mouseX * TILE_HEIGHT*Zoom / 2) - scrollY)*Zoom
+
+    x2d = ((hoverPosX+scrollX)-2*(hoverPosY+scrollY))/TILE_WIDTH
+    y2d = ((hoverPosY+scrollY)/TILE_HEIGHT + (hoverPosX+scrollX)/TILE_WIDTH)
+    return [int(x2d), int(y2d)]
+
+
+
 def render(screen):
     global scrollX
     global scrollY
     global Zoom
     global buildMode
+    global font
+
+    if(font == None):
+        font = pygame.font.Font(None, 30)
     #font = pygame.font.Font(None, 30)
     #--------------------------------  TILE RENDERING   -------------------------------------
 
@@ -103,6 +129,10 @@ def render(screen):
                 color = (100,100,100)
                 image = getTileImage(cellX, cellY)
                 #renders tile to screen
+                if(testTruckEnd[0] == None):
+                    if(cellX == testTruckEnd[0] and cellY == testTruckEnd[1]):
+                        image = ImageUtil.get_image("temp")
+
                 if(image.get_height()!=TILE_HEIGHT):
                     screen.blit(pygame.transform.scale(image, (int(TILE_WIDTH*Zoom), int(image.get_height()*Zoom))), (posX, (posY-image.get_height()+TILE_HEIGHT/2)*Zoom))
                 else:
@@ -137,6 +167,10 @@ def render(screen):
         pygame.draw.line(screen, (0,0,255), (hoverPosX+TILE_WIDTH*Zoom/2, hoverPosY-TILE_HEIGHT*Zoom/2), (hoverPosX+TILE_WIDTH*Zoom,hoverPosY))
         pygame.draw.line(screen, (0,0,255), (hoverPosX+TILE_WIDTH*Zoom,hoverPosY), (hoverPosX+TILE_WIDTH*Zoom/2,hoverPosY+TILE_HEIGHT*Zoom/2))
         pygame.draw.line(screen, (0,0,255), (hoverPosX+TILE_WIDTH*Zoom/2,hoverPosY+TILE_HEIGHT*Zoom/2),(hoverPosX,hoverPosY))
+
+        mouseCoord = mousePosToCoord(hoverPosX, hoverPosY)
+        textpos = font.render("X:" + str(mouseCoord[0]) + "  Y:" + str(mouseCoord[1]), True, (0, 0, 0))
+        screen.blit(textpos, (50,200))
 
     #---------------------------------------------------------------------------------------------
 
