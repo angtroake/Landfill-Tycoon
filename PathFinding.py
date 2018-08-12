@@ -7,6 +7,7 @@ import json
 import Map
 import ImageUtil
 from Constants import *
+import City
 
 
 
@@ -53,6 +54,7 @@ def createVehicle(id):
 def tick():
     global LiveVehicles
     global CurrentTick
+    global VehicleTypes
     global MaxTick
     if(CurrentTick >= MaxTick):
         for vehicle in LiveVehicles:
@@ -60,18 +62,48 @@ def tick():
             path = vehicle[5]
             pathindex = vehicle[6]
             endpos = vehicle[2]
+            vehicleType = VehicleTypes[vehicle[1]]
             #print("Current Pos: " + str(currentpos) + "   End Pos: " + str(endpos) + "   Path Length: " + str(len(path)) + "   Path Index: " + str(pathindex))
+            
+
+            #ADD GARBAGE IF NEXT TO HOUSE
+            if(vehicle[4] < vehicleType[1]):
+                if(Map.isHouseTile(currentpos[0]+1,currentpos[1]) or Map.isHouseTile(currentpos[0]-1, currentpos[1]) or Map.isHouseTile(currentpos[0], currentpos[1]-1) or Map.isHouseTile(currentpos[0], currentpos[1]+1)):
+                    #print("HOUSE NEXT TO")
+                    rand = random.randint(0, RANDOM_CHANCE_OF_GARBAGE_GET)
+                    if(rand == 0 and City.AmoutOfTrash > 0 ):
+                        vehicle[4] += 1
+                        print("Trash: " + str(vehicle[4]) + "      CITY TRASH: " + str(City.AmoutOfTrash))
 
 
+            
+                
+
+
+            #IF IT HAS REACHED THE END OF ITS RANDOM PATH GENERATE A NEW ONE AND DUMP TRASH IF HAS SOME
             if((currentpos[0] == endpos[0] and currentpos[1] == endpos[1]) or endpos[0] == None or len(path) <= 0 or pathindex >= len(path)):
-                vehicle[2] = getNewRoadTarget()
+                print(Map.TILES["landfill"])
+                if(Map.getTile(currentpos[0], currentpos[1]) == Map.TILES["landfill"]):
+                    None
+
+                if(vehicle[4] >= vehicleType[1]):
+                    newfill = getNewLandfillTarget()
+                    if(newfill == None):
+                        vehicle[2] = getNewRoadTarget()
+                        print("NO Landfill")
+                    else:
+                        vehicle[2] = newfill
+                        print("yay landfill!")
+                else:
+                    vehicle[2] = getNewRoadTarget()
                 startpos = currentpos
                 vehicle[5] = getPath(startpos, vehicle[2])
                 vehicle[6] = 0
                 Map.testTruckEnd = endpos
                 continue
 
-            #vehicle[0] = [path[pathindex][0], path[pathindex][1]]
+
+            #SET POSIITON TO NEXT POOSITION IN PATH
             vehicle[0] = [path[pathindex][0], path[pathindex][1]]
             vehicle[6] += 1
 
@@ -155,11 +187,24 @@ def getNewRoadTarget():
     RoadMap = Map.PATHMAP
     returns = [0,0]
         
-    while RoadMap[returns[0]][returns[1]] != '1' and RoadMap != None:
+    while RoadMap[returns[0]][returns[1]] != '1':
         returns = random.choice([(j,i) for i, row in enumerate(RoadMap) for j, val in enumerate(row) if val=='1'])
 
     return returns
 
+
+def getNewLandfillTarget():
+    RoadMap = Map.PATHMAP
+    returns = [0,0]
+
+    if(any('2' in sub for sub in RoadMap)):
+        print("there is a 2")
+        while RoadMap[returns[0]][returns[1]] != '2':
+            returns = random.choice([(j,i) for i, row in enumerate(RoadMap) for j, val in enumerate(row) if val=='2'])
+    else:
+        return None
+
+    return returns
 
 
 

@@ -3,44 +3,58 @@
         "name": "water",
         "id": 0,
         "image-name": "water",
-        "is-user-made": false
+        "is-user-made": false,
+        "is-house": false
     },
     "1": {
         "name": "grass",
         "id": 1,
         "image-name": "grass",
-        "is-user-made": false
+        "is-user-made": false,
+        "is-house": false
     },
     "2": {
         "name": "road-to-be",
         "id": 2,
         "image-name": "grass",
-        "is-user-made": false
+        "is-user-made": false,
+        "is-house": false
     },
+
+
+
+
     "10": {
         "name": "house",
         "id": 10,
         "image-name": "house",
-        "is-user-made": false
+        "is-user-made": false,
+        "is-house": true
     },
     "11": {
         "name": "house1",
         "id": 10,
         "image-name": "house1",
-        "is-user-made": false
+        "is-user-made": false,
+        "is-house": true
     },
     "12": {
         "name": "house2",
         "id": 10,
         "image-name": "house2",
-        "is-user-made": false
+        "is-user-made": false,
+        "is-house": true
     },
+
+    
     "20": {
         "name": "road",
         "id": 20,
         "image-name": "road",
-        "is-user-made": false
+        "is-user-made": false,
+        "is-house": false
     },
+
 
 
 
@@ -48,14 +62,16 @@
         "name": "user-road",
         "id": 22,
         "image-name": "road",
-        "is-user-made": true
+        "is-user-made": true,
+        "is-house": false
 
     },
     "23": {
         "name": "landfill",
         "id": "23",
         "image-name": "landfill",
-        "is-user-made": true
+        "is-user-made": true,
+        "is-house": false
     }
 
 }

@@ -26,7 +26,7 @@ ImageUtil.create_image("house", "res/tile/tile-house.png")
 ImageUtil.create_image("house1", "res/tile/tile-house1.png")
 ImageUtil.create_image("house2", "res/tile/tile-house2.png")
 ImageUtil.create_image("road", "res/tile/tile-road.png")
-ImageUtil.create_image("water", "res/tile/tile-water.png")
+ImageUtil.create_image("water", "res/tile/tile-water-2.png")
 ImageUtil.create_image("temp", "res/tile/tile-template.png")
 ImageUtil.create_image("landfill", "res/tile/tile-template.png")
 ImageUtil.create_image("truck1-TL", "res/trucks/truck1/truck1TL.png")
@@ -115,8 +115,10 @@ while not done:
 
 
     if(isPaused == False):
-        City.maptest()
+        Map.tick()
+        City.tick()
         PathFinding.tick()
+
 
 
     Map.render(screen)

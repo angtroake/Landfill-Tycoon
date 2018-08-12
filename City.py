@@ -1,12 +1,34 @@
 import Map
 from Constants import *
 import random
+import datetime
+
+
+AmoutOfTrash = 40
+Population = 1000
+
+#POPULATION * FERTILEAMOUNT(8.2)(constant) / 100
+BirthRate = None
+
+#POPULATION * POLUTION / 100 / 9(constant)
+DeathRate = None
+PopChangePerSecond = None
+
+LastPopChange = None
+
+LastPopMilestone = 1000
+
+
 #city generated tiles prefixed with 2
 #x and y of selected tile
 global seltilei
 global seltileX
 global seltileY
 surTiles = [None] * 100
+
+
+
+
 def getSurroundingtiles(X,Y):
     surTiles = [None] * 100
     #North
@@ -26,6 +48,8 @@ def getSurroundingtiles(X,Y):
     surTiles[31] = Y-1
     surTiles[32]  = Map.GMAP[surTiles[30]][surTiles[31]]
     return surTiles
+
+
 
 def isasurroundingtilex(tileX,tileY, x):
     tiles = []
@@ -95,3 +119,43 @@ def maptest():
     #roll dice to determine which of free tiles to build on dice roll weighted to favor higher priority squares
     #create array of all the free tiles add 5x 4x 3x 2x 1x as many values to the array depentant on priority
     #random.choice(array)
+
+
+
+"""
+function ran every game tick (game logic loop)
+"""
+def tick():
+    global LastPopChange
+    global Population
+    global PopChangePerSecond
+    global LastPopMilestone
+
+    if(LastPopChange == None):
+        LastPopChange = datetime.datetime.now()
+    
+    RefreshPopulationRates()
+    
+    currentTime = datetime.datetime.now()
+    if((currentTime - LastPopChange).total_seconds() >= SECONDS_BETWEEN_GROWTH):
+        Population += PopChangePerSecond
+        LastPopChange = currentTime
+        if(Population > LastPopMilestone + 100):
+            LastPopMilestone += 100
+            #print("new building")
+            maptest()
+
+
+
+def RefreshPopulationRates():
+    global BirthRate
+    global DeathRate
+    global Population
+    global POLUTION
+    global PopChangePerSecond
+
+    BirthRate = Population * FERTILE_CONSTANT / 100
+    DeathRate = Population * Map.Pollution / 100 / DEATH_CONSTANT
+
+    PopChangePerSecond = BirthRate - DeathRate
+

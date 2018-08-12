@@ -17,7 +17,14 @@ font = None
 MAP = None
 PATHMAP = None
 
+#DICT    {[x,y]: groupid}
+LandfillTiles = {}
+
+#DICT        {id: (amountfill, maxamount)}
+Landfillgroups = {}
+
 TileData = None
+#          name: id
 TILES = {}
 
 buildMode = 0
@@ -25,7 +32,7 @@ buildMode = 0
 testTruckEnd = [None, None]
 
 
-pollution = 0
+Pollution = 0
 
 def loadMap():
     with open("maps/map1/Map.csv") as csvmap:
@@ -115,13 +122,27 @@ def mousePosToCoord(x,y):
 def setTile(x, y, tileId):
     global MAP
     global PATHMAP
+    global LandfillTiles
     MAP[x][y] = str(tileId)
     if(str(tileId) == '20' or str(tileId) == '22'):
         PATHMAP[y][x] = '1'
+    elif(str(tileId) == '23'):
+        LandfillTiles[(x,y)] = None
+        PATHMAP[y][x] = '2'
+    else:
+        PATHMAP[y][x] = '0'
 
 def getTile(x, y):
     global MAP
     return MAP[x][y]
+
+
+
+def isHouseTile(x,y):
+    tile = getTile(x,y)
+    if(int(tile) >= 10 and int(tile) <= 19):
+        return True
+    return False
 
 
 
@@ -204,3 +225,26 @@ def render(screen):
 #TODO Adjust render limit when testing finished
 #TODO FIX CURSOR ON ZOOM     
 
+
+def tick():
+    global LandfillTiles
+    for pos in LandfillTiles:
+        #print(pos)
+        #print(LandfillTiles[pos])
+        None
+    
+
+
+
+
+
+def landfillLogic():
+    global LandfillTiles
+    global Landfillgroups
+
+
+    linked = []
+    
+    #expanding current ones
+    for tile in LandfillTiles:
+        None
