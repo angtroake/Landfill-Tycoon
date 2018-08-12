@@ -41,7 +41,6 @@ Map.scrollX = 1000
 Map.scrollY = -200
 Map.loadGMap()
 Map.loadTileData()
-City.maptest()
 
 PathFinding.initVehicleTypes()
 PathFinding.createVehicle(0)
@@ -118,7 +117,6 @@ while not done:
         Map.tick()
         City.tick()
         PathFinding.tick()
-
 
 
     Map.render(screen)
