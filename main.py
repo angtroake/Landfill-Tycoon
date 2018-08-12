@@ -41,7 +41,6 @@ Map.scrollX = 1000
 Map.scrollY = -200
 Map.loadGMap()
 Map.loadTileData()
-City.maptest()
 
 PathFinding.initVehicleTypes()
 PathFinding.createVehicle(0)
@@ -115,9 +114,9 @@ while not done:
 
 
     if(isPaused == False):
-        City.maptest()
         PathFinding.tick()
-
+        while(not City.maptest()):
+            print("i built something")
 
     Map.render(screen)
     Build.render(screen)
