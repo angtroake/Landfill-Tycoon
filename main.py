@@ -5,6 +5,8 @@ import Map
 import Build
 import City
 import UI
+import PathFinding
+
 from Constants import *
 from pygame.locals import *
 
@@ -40,6 +42,9 @@ ZoomTick = 0
 
 isPaused = False
 
+
+
+PathFinding.run()
 
 
 

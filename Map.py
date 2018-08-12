@@ -12,6 +12,8 @@ Zoom = 1
 
 
 MAP = None
+PATHMAP = None
+
 TileData = None
 TILES = {}
 
@@ -26,6 +28,9 @@ def loadMap():
         global MAP
         MAP = list(reader)
         MAP[0][0] = '0'
+    loadPathFindingMap(MAP)
+    
+
 
 def loadGMap():
     with open("maps/map1/growth.csv") as csvmap:
@@ -33,6 +38,18 @@ def loadGMap():
         global GMAP
         GMAP = list(reader)
         GMAP[0][0] = '99'
+
+
+def loadPathFindingMap(objMap):
+    global PATHMAP
+    PATHMAP = objMap
+    for(x in range(0, len(PATHMAP + 1))):
+        for(y in range(0, len(PATHMAP + 1))):
+            if(PATHMAP[x][y] == '1' or PATHMAP[x][y] == '0' or PATHMAP[x][y] == '10'):
+                PATHMAP[x][y] = '0'
+            else:
+                PATHMAP[x][y] = '1'
+
 
 
 def loadTileData():
