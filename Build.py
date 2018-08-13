@@ -285,6 +285,7 @@ def handleIncenerator(pos):
             if(Company.Money >= COST_OF_BURNER):
                 group[3] += 1
                 Map.setTile(pos[0], pos[1], Map.TILES["fire"])
+                Company.Money -= COST_OF_BURNER
 
 def handleBlackhole(pos):
     global blackholepos
@@ -297,6 +298,7 @@ def handleBlackhole(pos):
             if(Company.Money >= COST_OF_BHOLE):
                 group[5] += 1
                 Map.setTile(pos[0], pos[1], Map.TILES["blackhole"])
+                Company.Money -= COST_OF_BHOLE
 
 
 def handleRecycle(pos):
@@ -308,6 +310,7 @@ def handleRecycle(pos):
             if(Company.Money >= COST_OF_RECYCLE):
                 group[4] += 1
                 Map.setTile(pos[0], pos[1], Map.TILES["recycle"])
+                Company.Money -= COST_OF_RECYCLE
 
 
 def landfillNextToPos(pos):

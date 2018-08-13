@@ -25,7 +25,7 @@ VehicleTypes = {}
 finder = AStarFinder()
 
 CurrentTick = 0
-MaxTick = 40
+MaxTick = 20
 
 
 LastBillTime = None
