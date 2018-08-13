@@ -93,9 +93,13 @@ def render(screen):
     garbagestr = "Garbage to Collect: " + str(int(City.AmoutOfTrash))
     garbagetext = font.render(garbagestr, True, (0,0,0))
 
+    pollutionstr = "Pollution: " + str(int(Map.Pollution)) + "%"
+    Pollutiontext = font.render(pollutionstr, True, (0,0,0))
+
     screen.blit(moneytext, (50,screen.get_height() - 40))
-    screen.blit(poepletext, (screen.get_width() - len(poeplestr)*12, screen.get_height() - 40))
-    screen.blit(garbagetext, (screen.get_width() - len(garbagestr)*11.2, screen.get_height() - 80))
+    screen.blit(poepletext, (screen.get_width() - poepletext.get_width() - 10, screen.get_height() - 40))
+    screen.blit(garbagetext, (screen.get_width() - garbagetext.get_width() - 10, screen.get_height() - 70))
+    screen.blit(Pollutiontext, (screen.get_width() - Pollutiontext.get_width() - 10, screen.get_height() - 100))
 
 
 

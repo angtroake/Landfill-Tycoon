@@ -54,6 +54,8 @@ ImageUtil.create_image("recycler", "res/tile/tile-recycler.png")
 SoundUtil.create_sound("click", "res/sound/Click.ogg")
 
 
+Build.init()
+
 
 GameState = GAME_STATE_MENU
 

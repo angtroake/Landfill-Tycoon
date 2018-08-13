@@ -24,6 +24,10 @@ LastPopMilestone = 1000
 GrowthPossible = True
 
 
+
+
+
+
 #city generated tiles prefixed with 2
 #x and y of selected tile
 global seltilei
@@ -244,7 +248,6 @@ def RefreshPopulationRates():
     global BirthRate
     global DeathRate
     global Population
-    global POLUTION
     global PopChangePerSecond
 
     BirthRate = Population * FERTILE_CONSTANT / 100
@@ -252,3 +255,18 @@ def RefreshPopulationRates():
 
     PopChangePerSecond = (BirthRate - DeathRate)/20
 
+
+NotiPoepleDyingPlayed = False
+NotiPollution50 = False
+
+def notificationCheck():
+    global BirthRate
+    global DeathRate
+    global Population
+
+    if(DeathRate > BirthRate and NotiPoepleDyingPlayed == False):
+        NotiPoepleDyingPlayed = True
+        Notification.addNotification("People are begining to die from breathing. Government says global warming isn't real!")
+
+    else:
+        None

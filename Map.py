@@ -261,6 +261,7 @@ def tick():
     global Landfillgroups
     global LandfillAdded
     global lastLandfillTick
+    global Pollution
     if(LandfillAdded):
         print("Land FIll Added")
         landfillLogic2()
@@ -276,12 +277,16 @@ def tick():
         if((currentTime - lastLandfillTick).total_seconds() >= LANDFILL_TICK_SECONDS):
             if(group[0] >= group[4]*RECYCLE_REMOVE_AMOUNT):
                 group[0] -=  group[4]*RECYCLE_REMOVE_AMOUNT
+                Pollution -= 0.1*group[4]
             else:
+                Pollution -= group[0]*0.1
                 group[0] = 0
             
             if(group[0] >= group[3]*FIRE_REMOVE_AMOUNT):
                 group[0] -= group[3]*FIRE_REMOVE_AMOUNT
+                Pollution += 0.05*group[4]
             else:
+                Pollution += group[0]*0.05
                 group[0] = 0
     
     if((currentTime - lastLandfillTick).total_seconds() >= LANDFILL_TICK_SECONDS):

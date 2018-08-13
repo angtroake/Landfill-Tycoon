@@ -7,6 +7,12 @@ buildMode = 0
 
 buildStart = [None, None]
 
+font = None
+
+
+def init():
+    global font
+    font = pygame.font.Font(None, 25)
 
 def onMouseClick(x,y):
     global buildStart
@@ -23,9 +29,12 @@ def onMouseClick(x,y):
 
 def render(screen):
     global buildStart
+    global font
+
+    pos1 = pygame.mouse.get_pos()
+    pos = mousePosToCoord(pos1[0], pos1[1])
+
     if(buildStart[0] != None):
-        pos = pygame.mouse.get_pos()
-        pos = mousePosToCoord(pos[0], pos[1])
         
         selectorBoxTR = None
         selectorBoxTL = None
@@ -34,7 +43,7 @@ def render(screen):
     
         if(buildMode == BUILD_MODE_LANDFILL):
             color = (255,255,255)
-            if(abs(pos[0]-buildStart[0]) +1 < 3 and abs(pos[0]-buildStart[0])+1 < 3):
+            if(abs(pos[0]-buildStart[0]) < 3 and abs(pos[0]-buildStart[0]) < 3):
                 color = (255,0,0)
             selectorBoxTL = Map.getScreenPositionOfCoord(min(pos[0], buildStart[0]), min(pos[1], buildStart[1]))
             selectorBoxTR  = Map.getScreenPositionOfCoord(max(pos[0], buildStart[0])+1, min(pos[1], buildStart[1]))
@@ -44,6 +53,27 @@ def render(screen):
             pygame.draw.line(screen, color, selectorBoxTR, selectorBoxBR)
             pygame.draw.line(screen, color, selectorBoxBR, selectorBoxBL)
             pygame.draw.line(screen, color, selectorBoxBL, selectorBoxTL)
+
+            area = abs(pos[0]-buildStart[0]) * abs(pos[0]-buildStart[0])
+            color = (255,255,255)
+            if(area * COST_OF_LANDFILL > Company.Money):
+                color = (255,0,0)
+
+            cost = font.render("-" + str(area*COST_OF_LANDFILL) + "$", True, color)
+            screen.blit(cost, (pos1[0], pos1[1] - 10))
+        
+    if(buildMode == BUILD_MODE_DELETE):
+
+        color = (255,255,255)
+        moneyNeeded = Map.TILEOBJECTS[Map.getTile(pos[0], pos[1])][0] != -1
+        if(moneyNeeded != -1):
+            if(moneyNeeded > Company.Money):
+                color = (255,0,0)
+
+            cost = font.render("-" + str(Map.TILEOBJECTS[Map.getTile(pos[0], pos[1])][0]) + "$", True, color)
+            screen.blit(cost, (pos1[0], pos1[1] - 10))
+
+
             
             
         
@@ -145,8 +175,8 @@ def handleBuildLandfill(pos):
 
         if(landfillArea*COST_OF_LANDFILL <= Company.Money):
             if(abs(landfillwidth)+1 >= 3 and abs(landfillheight)+1 >= 3):
-                for x in range(min(buildStart[0], buildStart[0]+landfillwidth), max(buildStart[0]+1, buildStart[0]+landfillwidth+1)):
-                    for y in range(min(buildStart[1], buildStart[1]+landfillheight),max(buildStart[1]+1, buildStart[1]+landfillheight+1)):
+                for x in range(min(buildStart[0], buildStart[0]+landfillwidth +1), max(buildStart[0]+1, buildStart[0]+landfillwidth+1)):
+                    for y in range(min(buildStart[1], buildStart[1]+landfillheight + 1),max(buildStart[1]+1, buildStart[1]+landfillheight+1)):
                         if(Map.getTile(x,y) not in VALID_CONSTRUCTION_SPOTS):
                             canBuild = False
                             break
@@ -172,11 +202,11 @@ def handleDelete(pos):
             if(Map.isHouseTile(pos[0], pos[1], original=True) or Map.ORIGINAL_MAP[pos[0]][pos[1]] == Map.TILES["road"]):
                 Map.setTile(pos[0], pos[1], Map.TILES["grass"])
             if(tileV == Map.TILES["fire"]):
-                landfill = landfillNextToPos(tileV)
+                landfill = landfillNextToPos(pos)
                 if(landfill != None):
                     Map.Landfillgroups[Map.LandfillTiles[landfill]][3] -= 1
             if(tileV == Map.TILES["recycle"]):
-                landfill = landfillNextToPos(tileV)
+                landfill = landfillNextToPos(pos)
                 if(landfill != None):
                     Map.Landfillgroups[Map.LandfillTiles[landfill]][4] -= 1
             
