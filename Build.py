@@ -235,7 +235,7 @@ def handleDelete(pos):
     tileV = Map.getTile(pos[0], pos[1])
     costToDelete = Map.TILEOBJECTS[tileV][0]
     if costToDelete != -1:
-        if(Company.Money >= costToDelete):
+        if(Company.Money >= costToDelete and tileV != Map.TILES["landfill"]):
             Map.setTile(pos[0],pos[1], Map.ORIGINAL_MAP[pos[0]][pos[1]])
             Map.GMAP[pos[0]][pos[1]] = Map.ORIGINAL_GMAP[pos[0]][pos[1]]
             Company.Money -= costToDelete
@@ -245,10 +245,26 @@ def handleDelete(pos):
                 landfill = landfillNextToPos(pos)
                 if(landfill != None):
                     Map.Landfillgroups[Map.LandfillTiles[landfill]][3] -= 1
-            if(tileV == Map.TILES["recycle"]):
+            elif(tileV == Map.TILES["recycle"]):
                 landfill = landfillNextToPos(pos)
                 if(landfill != None):
                     Map.Landfillgroups[Map.LandfillTiles[landfill]][4] -= 1
+            elif(tileV == Map.TILES["blackhole"]):
+                landfill = landfillNextToPos(pos)
+                if(landfill != None):
+                    Map.Landfillgroups[Map.LandfillTiles[landfill]][5] -= 1
+        if(tileV == Map.TILES["landfill"]):
+            group = Map.Landfillgroups[Map.LandfillTiles[(pos[0], pos[1])]]
+            print(group)
+            if(group[0] <= group[1] - GARBAGE_PER_LANDFILL_TILE):
+                if(buildingNextToPos(pos) == None):
+                    if(Company.Money >= costToDelete):
+                        Company.Money -= costToDelete
+                        group[1] -= GARBAGE_PER_LANDFILL_TILE
+                        Map.LandfillTiles.pop((pos[0], pos[1]))
+                        Map.setTile(pos[0],pos[1], Map.ORIGINAL_MAP[pos[0]][pos[1]])
+                        Map.GMAP[pos[0]][pos[1]] = Map.ORIGINAL_GMAP[pos[0]][pos[1]]
+
             
                 
         
@@ -295,6 +311,21 @@ def landfillNextToPos(pos):
     elif(Map.getTile(pos[0],pos[1]-1) == Map.TILES["landfill"]):
         return (pos[0],pos[1]-1)
     elif(Map.getTile(pos[0],pos[1]+1) == Map.TILES["landfill"]):
+        return (pos[0],pos[1]+1)
+    else:
+        return None
+
+def buildingNextToPos(pos):
+    buildingtiles = [Map.TILES["fire"], Map.TILES["recycle"], Map.TILES["blackhole"]]
+
+
+    if(Map.getTile(pos[0]-1,pos[1]) in buildingtiles):
+        return (pos[0]-1,pos[1])
+    elif(Map.getTile(pos[0]+1,pos[1]) in buildingtiles):
+        return (pos[0]+1,pos[1])
+    elif(Map.getTile(pos[0],pos[1]-1) in buildingtiles):
+        return (pos[0],pos[1]-1)
+    elif(Map.getTile(pos[0],pos[1]+1) in buildingtiles):
         return (pos[0],pos[1]+1)
     else:
         return None

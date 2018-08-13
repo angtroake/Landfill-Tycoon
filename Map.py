@@ -362,7 +362,7 @@ def landfillLogic2():
             groupid = len(Landfillgroups)
             for tile in group:
                 LandfillTiles[tile] = groupid
-            Landfillgroups[groupid] = [0,len(group)*GARBAGE_PER_LANDFILL_TILE, (minX + (maxX-minX)/2, minY + (maxY-minY)/2), 0, 0, 0]
+            Landfillgroups[groupid] = [400,len(group)*GARBAGE_PER_LANDFILL_TILE, (minX + (maxX-minX)/2, minY + (maxY-minY)/2), 0, 0, 0]
 
             
 
