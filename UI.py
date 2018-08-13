@@ -154,6 +154,8 @@ def setBuildMode(modeID, icon):
     if(activeIcon == icon):
         activeIcon = None
         Map.buildMode = 0
+        Build.buildMode = 0
+
     else:
         activeIcon = icon
         Map.buildMode = modeID
