@@ -16,6 +16,15 @@ pygame.init()
 
 screen = pygame.display.set_mode((1280, 720), DOUBLEBUF)
 
+ImageUtil.create_image("logo", "res/menu/menu-truck.png")
+
+icon = pygame.Surface((32,32))
+icon.blit(pygame.transform.scale(ImageUtil.get_image("logo"), (32, 32)), (0,0))
+
+pygame.display.set_caption("Landfill Tycoon")
+pygame.display.set_icon(icon)
+
+
 done = False
 
 font = pygame.font.Font(None, 30)
