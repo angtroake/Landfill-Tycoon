@@ -304,6 +304,15 @@ def tick():
 
     if((currentTime - lastLandfillTick).total_seconds() >= LANDFILL_TICK_SECONDS):
         lastLandfillTick = currentTime
+    
+
+    goodgroups = copy.deepcopy(Landfillgroups)
+    for g in Landfillgroups:
+        group = Landfillgroups[g]
+        if(group[1] <= 0):
+            goodgroups.pop(g)
+    
+    Landfillgroups = goodgroups
 
     
 
