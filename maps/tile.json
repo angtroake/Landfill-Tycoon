@@ -85,7 +85,7 @@
     "24": {
         "name": "fire",
         "id": 24,
-        "image-name": "temp",
+        "image-name": "incinerator",
         "is-user-made": true,
         "is-house": false,
         "cost-to-delete": 200
@@ -93,7 +93,7 @@
     "25": {
         "name": "recycle",
         "id": 25,
-        "image-name": "temp",
+        "image-name": "recycler",
         "is-user-made": true,
         "is-house": false,
         "cost-to-delete": 200

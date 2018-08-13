@@ -48,6 +48,8 @@ ImageUtil.create_image("truck1-BR", "res/trucks/truck1/truck1BR.png")
 ImageUtil.create_image("menu-name-white", "res/mainmenu/name-white.png")
 ImageUtil.create_image("menu-name-black", "res/mainmenu/name-black.png")
 ImageUtil.create_image("menu-back", "res/mainmenu/menu-back.png")
+ImageUtil.create_image("incinerator", "res/tile/tile-incinerator.png")
+ImageUtil.create_image("recycler", "res/tile/tile-recycler.png")
 
 SoundUtil.create_sound("click", "res/sound/Click.ogg")
 

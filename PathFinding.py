@@ -109,23 +109,24 @@ def tick():
                         landfill += spaceLeft
                         vehicle[4] -= spaceLeft
 
-                endpos = None
-                path = None
-                while(endpos == None and path == None):
-                    if(vehicle[4] >= vehicleType[1]):
-                        newfill = getNewLandfillTarget()
-                        if(newfill == None):
-                            vehicle[2] = getNewRoadTarget()
-                            #print("NO Landfill")
-                            Notification.addNotification("Citizens worry as full garbage trucks roam the city without a landfill to go to!")
-                        else:
-                            vehicle[2] = newfill
-                            #print("yay landfill!")
-                    else:
+                if(vehicle[4] >= vehicleType[1]):
+                    newfill = getNewLandfillTarget()
+                    if(newfill == None):
                         vehicle[2] = getNewRoadTarget()
-                    startpos = currentpos
-                    path = getPath(startpos, vehicle[2])
-                    print(path)
+                        #print("NO Landfill")
+                        Notification.addNotification("Citizens worry as full garbage trucks roam the city without a landfill to go to!")
+                    else:
+                        vehicle[2] = newfill
+                        #print("yay landfill!")
+                else:
+                    vehicle[2] = getNewRoadTarget()
+
+                startpos = currentpos
+                path = getPath(startpos, vehicle[2])
+
+                if(len(path) == 0 and Map.getTile(vehicle[2][0], vehicle[2][1]) == Map.TILES["landfill"]):
+                    Notification.addNotification("Garbage truck drivers begin a trip to insanity as they can't find a road to the landfill!")
+                
 
                 vehicle[5] = path
                 vehicle[6] = 0
