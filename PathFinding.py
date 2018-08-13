@@ -106,7 +106,7 @@ def tick():
                         landfill[0] += vehicle[4]
                         vehicle[4] = 0
                     else:
-                        landfill += spaceLeft
+                        landfill[0] += spaceLeft
                         vehicle[4] -= spaceLeft
 
                 endpos = None
