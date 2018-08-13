@@ -283,9 +283,9 @@ def tick():
         if((currentTime - lastLandfillTick).total_seconds() >= LANDFILL_TICK_SECONDS):
             if(group[0] >= group[4]*RECYCLE_REMOVE_AMOUNT):
                 group[0] -=  group[4]*RECYCLE_REMOVE_AMOUNT
-                Pollution -= 0.1*group[4]
+                #Pollution -= 0.1*group[4]
             else:
-                Pollution -= group[0]*0.1
+                #Pollution -= group[0]*0.1
                 group[0] = 0
 
             if(group[0] >= group[5]*BLACKHOLE_REMOVE_AMOUNT):
