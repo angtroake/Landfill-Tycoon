@@ -27,16 +27,16 @@ def initUI(functionPause):
     # (imagename, id, (xpos, ypos), onClickFunction, isToggleable, isToggled, function parameter)
 
     icons.append(["menu-pause", 0, (0,0), functionPause, True, False, None])
-    icons.append(["menu-city", 1, (UI_ICON_SIZE*2, 0), openMenu, False, False, 1])
-    icons.append(["menu-company",2,  (UI_ICON_SIZE*3, 0), Notification.addNotification , False, False, "Citizens worry as full garbage trucks roam the city without a landfill to go to!"])
-    icons.append(["menu-build-road", 3, (UI_ICON_SIZE*5, 0), setBuildMode, True, False, BUILD_MODE_ROAD])
-    icons.append(["menu-build-landfill", 4, (UI_ICON_SIZE*6, 0), setBuildMode, True, False, BUILD_MODE_LANDFILL])
-    icons.append(["menu-trucks", 5, (UI_ICON_SIZE*10, 0), buyTruck, False, True, 0])
-    icons.append(["menu-bomb", 6, (UI_ICON_SIZE*8,0), setBuildMode, True, False, BUILD_MODE_DELETE])
-    icons.append(["menu-building", 7, (UI_ICON_SIZE*7,0), openMenu, True, False, 7])
-    icons.append(["menu-fire", 90, (UI_ICON_SIZE*7,UI_ICON_SIZE), setBuildMode, True, False, BUILD_MODE_FIRE])
-    icons.append(["menu-recycle", 90, (UI_ICON_SIZE*8,UI_ICON_SIZE), setBuildMode, True, False, BUILD_MODE_RECYCLE])
-    icons.append(["menu-blackhole", 90, (UI_ICON_SIZE*9,UI_ICON_SIZE), setBuildMode, True, False, BUILD_MODE_BLACKHOLE])
+    #icons.append(["menu-city", 1, (UI_ICON_SIZE*2, 0), openMenu, False, False, 1])
+    #icons.append(["menu-company",2,  (UI_ICON_SIZE*3, 0), Notification.addNotification , False, False, "Citizens worry as full garbage trucks roam the city without a landfill to go to!"])
+    icons.append(["menu-build-road", 3, (UI_ICON_SIZE*2, 0), setBuildMode, True, False, BUILD_MODE_ROAD])
+    icons.append(["menu-build-landfill", 4, (UI_ICON_SIZE*3, 0), setBuildMode, True, False, BUILD_MODE_LANDFILL])
+    icons.append(["menu-trucks", 5, (UI_ICON_SIZE*7, 0), buyTruck, False, True, 0])
+    icons.append(["menu-bomb", 6, (UI_ICON_SIZE*5,0), setBuildMode, True, False, BUILD_MODE_DELETE])
+    icons.append(["menu-building", 7, (UI_ICON_SIZE*4,0), openMenu, True, False, 7])
+    icons.append(["menu-fire", 90, (UI_ICON_SIZE*4,UI_ICON_SIZE), setBuildMode, True, False, BUILD_MODE_FIRE])
+    icons.append(["menu-recycle", 90, (UI_ICON_SIZE*5,UI_ICON_SIZE), setBuildMode, True, False, BUILD_MODE_RECYCLE])
+    icons.append(["menu-blackhole", 90, (UI_ICON_SIZE*6,UI_ICON_SIZE), setBuildMode, True, False, BUILD_MODE_BLACKHOLE])
     
     
 
@@ -64,7 +64,7 @@ def render(screen):
     global pauseActive
     global buildingMenuOpen
     font = pygame.font.Font(None, 30)
-    backrect = pygame.draw.rect(screen, (73, 130, 179), [0,0,UI_ICON_SIZE*11, UI_ICON_SIZE])
+    backrect = pygame.draw.rect(screen, (73, 130, 179), [0,0,UI_ICON_SIZE*8, UI_ICON_SIZE])
     for i in icons:
         if(i != None):
             if(i[1] != 90):

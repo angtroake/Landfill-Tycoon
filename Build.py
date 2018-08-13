@@ -46,7 +46,7 @@ def render(screen):
     
         if(buildMode == BUILD_MODE_LANDFILL):
             color = (255,255,255)
-            if(abs(pos[0]-buildStart[0]) < 3 and abs(pos[0]-buildStart[0]) < 3):
+            if(abs(pos[0]-buildStart[0]) + 1 < 3 and abs(pos[1]-buildStart[1]) +1 < 3):
                 color = (255,0,0)
             selectorBoxTL = Map.getScreenPositionOfCoord(min(pos[0], buildStart[0]), min(pos[1], buildStart[1]))
             selectorBoxTR  = Map.getScreenPositionOfCoord(max(pos[0], buildStart[0])+1, min(pos[1], buildStart[1]))
@@ -57,7 +57,7 @@ def render(screen):
             pygame.draw.line(screen, color, selectorBoxBR, selectorBoxBL)
             pygame.draw.line(screen, color, selectorBoxBL, selectorBoxTL)
 
-            area = abs(pos[0]-buildStart[0]) * abs(pos[0]-buildStart[0])
+            area = (abs(pos[0]-buildStart[0])+1) * (abs(pos[1]-buildStart[1])+1)
             color = (255,255,255)
             if(area * COST_OF_LANDFILL > Company.Money):
                 color = (255,0,0)
@@ -208,25 +208,32 @@ def handleBuildLandfill(pos):
     if(buildStart[0] != None):
         landfillwidth = pos[0] - buildStart[0]
         landfillheight = pos[1] - buildStart[1]
-        landfillArea = abs(landfillwidth*landfillheight)
+        landfillArea = (abs(landfillwidth) + 1)*(abs(landfillheight)+1)
 
         canBuild = True
         ListBlocks = []
 
         if(landfillArea*COST_OF_LANDFILL <= Company.Money):
             if(abs(landfillwidth)+1 >= 3 and abs(landfillheight)+1 >= 3):
-                for x in range(min(buildStart[0], buildStart[0]+landfillwidth +1), max(buildStart[0]+1, buildStart[0]+landfillwidth+1)):
-                    for y in range(min(buildStart[1], buildStart[1]+landfillheight + 1),max(buildStart[1]+1, buildStart[1]+landfillheight+1)):
+                for x in range(min(buildStart[0], buildStart[0]+landfillwidth), max(buildStart[0]+1, buildStart[0]+landfillwidth+1)):
+                    for y in range(min(buildStart[1], buildStart[1]+landfillheight),max(buildStart[1]+1, buildStart[1]+landfillheight+1)):
                         if(Map.getTile(x,y) not in VALID_CONSTRUCTION_SPOTS):
+                            buildStart[0] = None
                             canBuild = False
                             break
                         else:
                             ListBlocks.append((x,y))
+            else:
+                canBuild = False
+        else:
+            canBuild = False
         if canBuild:            
             for block in ListBlocks:
                 Map.setTile(block[0],block[1], Map.TILES["landfill"])
                 Map.GMAP[block[0]][block[1]] = "00"
-                Company.Money -= COST_OF_LANDFILL
+            
+            Company.Money -= COST_OF_LANDFILL*landfillArea
+
 
         buildStart[0] = None
 #---------------------------------------- BULLDOZE METHODS -----------------------------------------------------------------
