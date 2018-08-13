@@ -176,6 +176,7 @@ def render(screen):
     global Zoom
     global buildMode
     global font
+    global blackholemass
 
     if(font == None):
         font = pygame.font.Font(None, 30)
@@ -248,6 +249,9 @@ def render(screen):
         screen.blit(textLandfill, (pos[0], pos[1]-40))
         screen.blit(textAmountFill, (pos[0], pos[1]))
 
+    if(blackholemass>BLACKHOLEMASS_GAMEOVER):
+        pygame.draw.circle(screen, (0,0,0), Build.blackholepos, 500)
+        print("test")
     
 
 
@@ -289,6 +293,7 @@ def tick():
                 blackholemass += group[5]*BLACKHOLE_REMOVE_AMOUNT
             else:
                 group[0] = 0
+                blackholemass += group[0]
             
             if(group[0] >= group[3]*FIRE_REMOVE_AMOUNT):
                 group[0] -= group[3]*FIRE_REMOVE_AMOUNT
@@ -297,8 +302,6 @@ def tick():
                 Pollution += group[0]*0.05
                 group[0] = 0
 
-    if(blackholemass>BLACKHOLEMASS_GAMEOVER):
-        pygame.draw.circle(screen, black, Build.blackholepos, 500)
     if((currentTime - lastLandfillTick).total_seconds() >= LANDFILL_TICK_SECONDS):
         lastLandfillTick = currentTime
 
