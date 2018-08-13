@@ -21,6 +21,9 @@ MAP = None
 PATHMAP = None
 GMAP = None
 
+ORIGINAL_MAP = None
+ORIGINAL_GMAP = None
+
 #DICT    {[x,y]: groupid}
 LandfillTiles = {}
 
@@ -32,6 +35,7 @@ LandfillAdded = False
 TileData = None
 #          name: id
 TILES = {}
+TILEOBJECTS = {}    # DICT    id: [cost-to-delete]
 
 buildMode = 0
 
@@ -42,8 +46,10 @@ def loadMap():
     with open("maps/map1/Map.csv") as csvmap:
         reader = csv.reader(csvmap)
         global MAP
+        global ORIGINAL_MAP
         MAP = list(reader)
         MAP[0][0] = '0'
+        ORIGINAL_MAP = copy.deepcopy(MAP)
     
 
 
@@ -51,8 +57,10 @@ def loadGMap():
     with open("maps/map1/growth.csv") as csvmap:
         reader = csv.reader(csvmap)
         global GMAP
+        global ORIGINAL_GMAP
         GMAP = list(reader)
         GMAP[0][0] = '99'
+        ORIGINAL_GMAP = copy.deepcopy(GMAP)
 
 
 def loadPathFindingMap():
@@ -78,10 +86,12 @@ def loadPathFindingMap():
 def loadTileData():
     global TileData
     global TILES
+    global TILEOBJECTS
     with open("maps/tile.json") as jsonFile:
         TileData = json.load(jsonFile)
         for tile in TileData:
             TILES[TileData[tile]["name"]] = str(TileData[tile]["id"])
+            TILEOBJECTS[str(TileData[tile]["id"])] = [TileData[tile]["cost-to-delete"]]
         
 
 
@@ -144,8 +154,13 @@ def getTile(x, y):
 
 
 
-def isHouseTile(x,y):
-    tile = getTile(x,y)
+def isHouseTile(x,y, original = False):
+    global ORIGINAL_MAP
+    if(original == False):
+        tile = getTile(x,y)
+    else:
+        tile = ORIGINAL_MAP[x][y]
+        
     if(int(tile) >= 10 and int(tile) <= 19):
         return True
     return False

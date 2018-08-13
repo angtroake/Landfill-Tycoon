@@ -48,8 +48,6 @@ Map.loadTileData()
 City.init()
 
 PathFinding.initVehicleTypes()
-PathFinding.createVehicle(0)
-
 
 Zoom = 1
 ZoomTick = 0

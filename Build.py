@@ -158,15 +158,17 @@ def handleBuildLandfill(pos):
 #---------------------------------------- BULLDOZE METHODS -----------------------------------------------------------------
 def handleDelete(pos):
     
-    tileV = Map.MAP[pos[0]][pos[1]]
-    if(Map.isHouseTile(pos[0],pos[1])): #generated building
-        Map.setTile(pos[0],pos[1],"1") # set to grass
-        Map.GMAP[pos[0]][pos[1]] = "0"
-    elif(tileV == "20"): #generated road
-        Map.setTile(pos[0],pos[1],"2") # set to road to be
-        Map.GMAP[pos[0]][pos[1]] = "0"
-    elif(tileV == "22"):
-        Map.setTile(pos[0],pos[1],"1") # set to grass
-        Map.GMAP[pos[0]][pos[1]] = "0"
+    tileV = Map.getTile(pos[0], pos[1])
+    costToDelete = Map.TILEOBJECTS[tileV][0]
+    if costToDelete != -1:
+        if(Company.Money >= costToDelete):
+            Map.setTile(pos[0],pos[1], Map.ORIGINAL_MAP[pos[0]][pos[1]])
+            Map.GMAP[pos[0]][pos[1]] = Map.ORIGINAL_GMAP[pos[0]][pos[1]]
+            Company.Money -= costToDelete
+            if(Map.isHouseTile(pos[0], pos[1], original=True) or Map.ORIGINAL_MAP[pos[0]][pos[1]] == Map.TILES["road"]):
+                Map.setTile(pos[0], pos[1], Map.TILES["grass"])
+            
+                
+        
 
 

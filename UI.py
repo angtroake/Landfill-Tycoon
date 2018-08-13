@@ -24,12 +24,14 @@ def initUI(functionPause):
     # (imagename, id, (xpos, ypos), onClickFunction, isToggleable, isToggled, function parameter)
 
     icons.append(["menu-pause", 0, (0,0), functionPause, True, False, None])
-    icons.append(["menu-city", 1, (UI_ICON_SIZE*1, 0), openMenu, False, False, 1])
-    icons.append(["menu-company",2,  (UI_ICON_SIZE*2, 0),City.maptest , False, False, 2])
-    icons.append(["menu-build-road", 3, (UI_ICON_SIZE*3, 0), setBuildMode, True, False, BUILD_MODE_ROAD])
-    icons.append(["menu-build-landfill", 4, (UI_ICON_SIZE*4, 0), setBuildMode, True, False, BUILD_MODE_LANDFILL])
-    icons.append(["menu-trucks", 5, (UI_ICON_SIZE*5, 0), PathFinding.createVehicle, False, True, 0])
-    icons.append(["menu-pause", 6, (UI_ICON_SIZE*6,0), setBuildMode, True, False, BUILD_MODE_DELETE])
+    icons.append(["menu-city", 1, (UI_ICON_SIZE*2, 0), openMenu, False, False, 1])
+    icons.append(["menu-company",2,  (UI_ICON_SIZE*3, 0),City.maptest , False, False, 2])
+    icons.append(["menu-build-road", 3, (UI_ICON_SIZE*5, 0), setBuildMode, True, False, BUILD_MODE_ROAD])
+    icons.append(["menu-build-landfill", 4, (UI_ICON_SIZE*6, 0), setBuildMode, True, False, BUILD_MODE_LANDFILL])
+    icons.append(["menu-trucks", 5, (UI_ICON_SIZE*10, 0), PathFinding.createVehicle, False, True, 0])
+    icons.append(["menu-bomb", 6, (UI_ICON_SIZE*8,0), setBuildMode, True, False, BUILD_MODE_DELETE])
+    icons.append(["menu-building", 7, (UI_ICON_SIZE*7,0), openMenu, True, False, 7])
+    
     
 
 def loadImages():
@@ -39,6 +41,9 @@ def loadImages():
     ImageUtil.create_image("menu-company", "res/menu/menu-company.png", False)
     ImageUtil.create_image("menu-build-landfill", "res/menu/menu-landfill.png", False)
     ImageUtil.create_image("menu-trucks", "res/menu/menu-truck.png", False)
+    ImageUtil.create_image("menu-building", "res/menu/menu-building.png", False)
+    ImageUtil.create_image("menu-bomb", "res/menu/menu-bomb.png", False)
+    
     
     
 
@@ -49,6 +54,7 @@ def render(screen):
     global activeIcon
     global pauseActive
     font = pygame.font.Font(None, 30)
+    backrect = pygame.draw.rect(screen, (73, 130, 179), [0,0,UI_ICON_SIZE*11, UI_ICON_SIZE])
     for i in icons:
         if(i != None):
             screen.blit(ImageUtil.get_image(i[0]), (i[2][0], i[2][1]))
