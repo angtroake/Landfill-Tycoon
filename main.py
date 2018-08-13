@@ -55,6 +55,8 @@ ImageUtil.create_image("blackhole", "res/tile/tile-blackholefacility.png")
 SoundUtil.create_sound("click", "res/sound/Click.ogg")
 
 
+Build.init()
+
 
 GameState = GAME_STATE_MENU
 
