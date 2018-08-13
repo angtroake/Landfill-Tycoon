@@ -299,6 +299,8 @@ def tick():
 
     if(blackholemass>BLACKHOLEMASS_GAMEOVER):
         pygame.draw.circle(screen, black, Build.blackholepos, 500)
+    else:
+        print(blackholemass, BLACKHOLEMASS_GAMEOVER, BLACKHOLE_REMOVE_AMOUNT)
     if((currentTime - lastLandfillTick).total_seconds() >= LANDFILL_TICK_SECONDS):
         lastLandfillTick = currentTime
 
