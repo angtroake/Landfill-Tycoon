@@ -166,6 +166,8 @@ def maptest():
                 btilesY.append(cellY)
 
     #randomly pick a tile from array
+    if( not len(btilesX)-1 > 0):
+        return True
     seltilei = random.randint(0, len(btilesX)-1)
     seltileX = btilesX[seltilei]
     seltileY = btilesY[seltilei]
@@ -187,13 +189,13 @@ def maptest():
         newtileY = newtile*10+1
         if(surtiles[newtile*10+2] != "00" and surtiles[newtile*10+2] !="0" and surtiles[newtile*10+2] !="99"):
             if(Map.MAP[surtiles[newtileX]][surtiles[newtileY]] == "1"):
-                Map.MAP[surtiles[newtileX]][surtiles[newtileY]] = str(random.randint(0,2) + 10)
+                Map.setTile(surtiles[newtileX],surtiles[newtileY],str(random.randint(0,2) + 10))
                 Map.GMAP[surtiles[newtileX]][surtiles[newtileY]] = "0"
             elif(Map.MAP[surtiles[newtileX]][surtiles[newtileY]] == "2"):
-                Map.MAP[surtiles[newtileX]][surtiles[newtileY]] = "20"
+                Map.setTile(surtiles[newtileX],surtiles[newtileY],"20")
                 Map.GMAP[surtiles[newtileX]][surtiles[newtileY]] = "0"
             else:
-                Map.MAP[surtiles[newtileX]][surtiles[newtileY]] = "3"
+                Map.setTile(surtiles[newtileX],surtiles[newtileY],"3")
                 Map.GMAP[surtiles[newtileX]][surtiles[newtileY]] = "0"
     surtilesInvalid = 0
     return True
@@ -215,6 +217,7 @@ def maptest():
 function ran every game tick (game logic loop)
 """
 def tick():
+    growthattempts = 0
     global LastPopChange
     global Population
     global PopChangePerSecond
@@ -236,6 +239,7 @@ def tick():
             LastPopMilestone += 100
             #print("new building")
             while(not maptest()):
+                growthattempts+=1
                 None
             #b = maptest2()
 

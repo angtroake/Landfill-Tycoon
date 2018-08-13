@@ -6,6 +6,7 @@ import Map
 import Build
 import City
 import SoundUtil
+import PathFinding
 
 icons = []
 activeIcon = None
@@ -27,7 +28,8 @@ def initUI(functionPause):
     icons.append(["menu-company",2,  (UI_ICON_SIZE*2, 0),City.maptest , False, False, 2])
     icons.append(["menu-build-road", 3, (UI_ICON_SIZE*3, 0), setBuildMode, True, False, BUILD_MODE_ROAD])
     icons.append(["menu-build-landfill", 4, (UI_ICON_SIZE*4, 0), setBuildMode, True, False, BUILD_MODE_LANDFILL])
-    icons.append(["menu-trucks", 5, (UI_ICON_SIZE*5, 0), City.maptest2, False, True, 5])
+    icons.append(["menu-trucks", 5, (UI_ICON_SIZE*5, 0), PathFinding.createVehicle, False, True, 0])
+    icons.append(["menu-pause", 6, (UI_ICON_SIZE*6,0), setBuildMode, True, False, BUILD_MODE_DELETE])
     
 
 def loadImages():
@@ -92,7 +94,7 @@ def mouseClick(x,y):
                     pauseActive = not pauseActive
                     setBuildMode(0, None)
 
-                if(i[3] == openMenu):
+                if(i[3] == openMenu or i[3] == PathFinding.createVehicle):
                     i[3](i[6])
                     return True
                 if(i[3] == setBuildMode):
