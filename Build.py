@@ -7,6 +7,7 @@ buildMode = 0
 
 buildStart = [None, None]
 
+blackholepos = (0 , 0)
 
 def onMouseClick(x,y):
     global buildStart
@@ -20,6 +21,8 @@ def onMouseClick(x,y):
         initLandfillBuild(pos)
     elif buildMode == BUILD_MODE_DELETE:
         handleDelete(pos)
+    elif buildMode == BUILD_MODE_BLACKHOLE:
+        handleBlackhole(pos)
 
 def render(screen):
     global buildStart
@@ -192,6 +195,18 @@ def handleIncenerator(pos):
             if(Company.Money >= COST_OF_BURNER):
                 group[3] += 1
                 Map.setTile(pos[0], pos[1], Map.TILES["fire"])
+
+def handleBlackhole(pos):
+    global blackholepos
+    blackholepos = pos
+    tile = Map.getTile(pos[0], pos[1])
+    if(tile in VALID_CONSTRUCTION_SPOTS):
+        landfill = landfillNextToPos(pos)
+        if(landfill != None):
+            group = Map.Landfillgroups[Map.LandfillTiles[landfill]]
+            if(Company.Money >= COST_OF_BHOLE):
+                group[3] += 1
+                Map.setTile(pos[0], pos[1], Map.TILES["blackhole"])
 
 
 def handleRecycle(pos):

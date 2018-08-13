@@ -97,6 +97,14 @@
         "is-user-made": true,
         "is-house": false,
         "cost-to-delete": 200
+    },
+    "26": {
+        "name": "blackhole",
+        "id": 26,
+        "image-name": "blackhole",
+        "is-user-made": true,
+        "is-house": false,
+        "cost-to-delete": -1
     }
     
 

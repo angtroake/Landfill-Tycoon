@@ -10,6 +10,7 @@ from scipy import ndimage
 import numpy as np
 from skimage import measure
 import datetime
+import Build
 
 scrollX = 0
 scrollY = 0
@@ -28,8 +29,8 @@ ORIGINAL_GMAP = None
 #DICT    {[x,y]: groupid}
 LandfillTiles = {}
 
-#                       0          1               2               3            4
-#DICT        {id: [amountfill, maxamount, (centerX, centerY), #incinerators, #recycle]}
+#                       0          1               2               3            4           5
+#DICT        {id: [amountfill, maxamount, (centerX, centerY), #incinerators, #recycle, #blackhole]}
 Landfillgroups = {}
 
 LandfillAdded = False
@@ -254,13 +255,14 @@ def render(screen):
 
 
 lastLandfillTick = None
-
+blackholemass  = 0
 
 def tick():
     global LandfillTiles
     global Landfillgroups
     global LandfillAdded
     global lastLandfillTick
+    global blackholemass
     if(LandfillAdded):
         print("Land FIll Added")
         landfillLogic2()
@@ -278,12 +280,20 @@ def tick():
                 group[0] -=  group[4]*RECYCLE_REMOVE_AMOUNT
             else:
                 group[0] = 0
+
+            if(group[0] >= group[5]*BLACKHOLE_REMOVE_AMOUNT):
+                group[0] -=  group[5]*BLACKHOLE_REMOVE_AMOUNT
+                blackholemass += group[5]*BLACKHOLE_REMOVE_AMOUNT
+            else:
+                group[0] = 0
             
             if(group[0] >= group[3]*FIRE_REMOVE_AMOUNT):
                 group[0] -= group[3]*FIRE_REMOVE_AMOUNT
             else:
                 group[0] = 0
-    
+
+    if(blackholemass>BLACKHOLEMASS_GAMEOVER):
+        pygame.draw.circle(screen, black, Build.blackholepos, 500)
     if((currentTime - lastLandfillTick).total_seconds() >= LANDFILL_TICK_SECONDS):
         lastLandfillTick = currentTime
 
@@ -347,7 +357,7 @@ def landfillLogic2():
             groupid = len(Landfillgroups)
             for tile in group:
                 LandfillTiles[tile] = groupid
-            Landfillgroups[groupid] = [0,len(group)*GARBAGE_PER_LANDFILL_TILE, (minX + (maxX-minX)/2, minY + (maxY-minY)/2), 0, 0]
+            Landfillgroups[groupid] = [0,len(group)*GARBAGE_PER_LANDFILL_TILE, (minX + (maxX-minX)/2, minY + (maxY-minY)/2), 0, 0, 0]
 
             
 

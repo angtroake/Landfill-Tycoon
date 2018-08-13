@@ -50,6 +50,7 @@ ImageUtil.create_image("menu-name-black", "res/mainmenu/name-black.png")
 ImageUtil.create_image("menu-back", "res/mainmenu/menu-back.png")
 ImageUtil.create_image("incinerator", "res/tile/tile-incinerator.png")
 ImageUtil.create_image("recycler", "res/tile/tile-recycler.png")
+ImageUtil.create_image("blackhole", "res/tile/tile-blackholefacility.png")
 
 SoundUtil.create_sound("click", "res/sound/Click.ogg")
 

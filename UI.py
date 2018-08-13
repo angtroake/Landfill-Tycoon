@@ -36,6 +36,7 @@ def initUI(functionPause):
     icons.append(["menu-building", 7, (UI_ICON_SIZE*7,0), openMenu, True, False, 7])
     icons.append(["menu-fire", 90, (UI_ICON_SIZE*7,UI_ICON_SIZE), setBuildMode, True, False, BUILD_MODE_FIRE])
     icons.append(["menu-recycle", 90, (UI_ICON_SIZE*8,UI_ICON_SIZE), setBuildMode, True, False, BUILD_MODE_RECYCLE])
+    icons.append(["menu-blackhole", 90, (UI_ICON_SIZE*9,UI_ICON_SIZE), setBuildMode, True, False, BUILD_MODE_BLACKHOLE])
     
     
 
@@ -49,6 +50,7 @@ def loadImages():
     ImageUtil.create_image("menu-building", "res/menu/menu-building.png", False)
     ImageUtil.create_image("menu-bomb", "res/menu/menu-bomb.png", False)
     ImageUtil.create_image("menu-fire", "res/menu/menu-fire.png", False)
+    ImageUtil.create_image("menu-blackhole", "res/menu/menu-blackhole.png", False)
     ImageUtil.create_image("menu-recycle", "res/menu/menu-recycle.png", False)
     
     
