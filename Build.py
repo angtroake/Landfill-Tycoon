@@ -65,16 +65,53 @@ def render(screen):
             cost = font.render("-" + str(area*COST_OF_LANDFILL) + "$", True, color)
             screen.blit(cost, (pos1[0], pos1[1] - 10))
         
-    if(buildMode == BUILD_MODE_DELETE):
+    elif(buildMode == BUILD_MODE_DELETE):
 
         color = (255,255,255)
-        moneyNeeded = Map.TILEOBJECTS[Map.getTile(pos[0], pos[1])][0] != -1
+        moneyNeeded = Map.TILEOBJECTS[Map.getTile(pos[0], pos[1])][0]
         if(moneyNeeded != -1):
             if(moneyNeeded > Company.Money):
                 color = (255,0,0)
 
             cost = font.render("-" + str(Map.TILEOBJECTS[Map.getTile(pos[0], pos[1])][0]) + "$", True, color)
             screen.blit(cost, (pos1[0], pos1[1] - 10))
+    
+
+    buildingCost = 0
+    displaybuilding = False
+
+    if(buildMode == BUILD_MODE_FIRE):
+        displaybuilding = True
+        buildingCost = COST_OF_BURNER
+    elif(buildMode == BUILD_MODE_RECYCLE):
+        displaybuilding = True
+        buildingCost = COST_OF_RECYCLE
+    elif(buildMode == BUILD_MODE_BLACKHOLE):
+        displaybuilding = True
+        buildingCost = COST_OF_BHOLE
+    
+        
+    if(displaybuilding):
+        color = (255,255,255)
+        if(landfillNextToPos(pos) and Map.getTile(pos[0], pos[1]) in VALID_CONSTRUCTION_SPOTS):
+            if(Company.Money < buildingCost):
+                color = (255,0,0)
+            cost = font.render("-" + str(buildingCost) + "$", True, color)
+            screen.blit(cost, (pos1[0], pos1[1] - 10))
+        else:
+            color = (255,0,0)
+            selectorBoxTL = Map.getScreenPositionOfCoord(pos[0], pos[1])
+            selectorBoxTR  = Map.getScreenPositionOfCoord(pos[0]+1, pos[1])
+            selectorBoxBR = Map.getScreenPositionOfCoord(pos[0]+1, pos[1]+1)
+            selectorBoxBL = Map.getScreenPositionOfCoord(pos[0], pos[1]+1)
+            pygame.draw.line(screen, color, selectorBoxTL, selectorBoxTR)
+            pygame.draw.line(screen, color, selectorBoxTR, selectorBoxBR)
+            pygame.draw.line(screen, color, selectorBoxBR, selectorBoxBL)
+            pygame.draw.line(screen, color, selectorBoxBL, selectorBoxTL)
+    
+
+            
+
 
 
             
@@ -235,7 +272,7 @@ def handleBlackhole(pos):
         if(landfill != None):
             group = Map.Landfillgroups[Map.LandfillTiles[landfill]]
             if(Company.Money >= COST_OF_BHOLE):
-                group[3] += 1
+                group[5] += 1
                 Map.setTile(pos[0], pos[1], Map.TILES["blackhole"])
 
 
@@ -246,7 +283,7 @@ def handleRecycle(pos):
         if(landfill != None):
             group = Map.Landfillgroups[Map.LandfillTiles[landfill]]
             if(Company.Money >= COST_OF_RECYCLE):
-                group[3] += 1
+                group[4] += 1
                 Map.setTile(pos[0], pos[1], Map.TILES["recycle"])
 
 
