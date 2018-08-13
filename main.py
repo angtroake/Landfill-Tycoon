@@ -2,6 +2,7 @@ import pygame
 import sys
 import ImageUtil
 import Map
+import aMainMenu
 import Build
 import City
 import UI
@@ -43,9 +44,22 @@ ImageUtil.create_image("truck1-TL", "res/trucks/truck1/truck1TL.png")
 ImageUtil.create_image("truck1-TR", "res/trucks/truck1/truck1TR.png")
 ImageUtil.create_image("truck1-BL", "res/trucks/truck1/truck1BL.png")
 ImageUtil.create_image("truck1-BR", "res/trucks/truck1/truck1BR.png")
+ImageUtil.create_image("menu-name-white", "res/mainmenu/name-white.png")
+ImageUtil.create_image("menu-name-black", "res/mainmenu/name-black.png")
 
 SoundUtil.create_sound("click", "res/sound/Click.ogg")
 
+
+
+GameState = GAME_STATE_MENU
+
+def startGame():
+    global GameState
+    GameState = GAME_STATE_GAME
+
+
+
+aMainMenu.init(screen, startGame)
 
 Map.loadMap()
 Map.loadPathFindingMap()
@@ -62,10 +76,6 @@ Zoom = 1
 ZoomTick = 0
 
 isPaused = False
-
-
-
-#PathFinding.run()
 
 
 
@@ -87,13 +97,17 @@ while not done:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouseX = pygame.mouse.get_pos()[0]
             mouseY = pygame.mouse.get_pos()[1]
-            uiclick = UI.mouseClick(mouseX, mouseY)
-            if(not uiclick):
-                Build.onMouseClick(mouseX, mouseY)
+            if(GameState == GAME_STATE_GAME):
+                uiclick = UI.mouseClick(mouseX, mouseY)
+                if(not uiclick):
+                    Build.onMouseClick(mouseX, mouseY)
+            elif(GameState == GAME_STATE_MENU):
+                aMainMenu.onclick((mouseX, mouseY))
         elif event.type == pygame.MOUSEBUTTONUP:
-            mouseX = pygame.mouse.get_pos()[0]
-            mouseY = pygame.mouse.get_pos()[1]
-            Build.onMouseRelease(mouseX, mouseY)
+            if(GameState == GAME_STATE_GAME):
+                mouseX = pygame.mouse.get_pos()[0]
+                mouseY = pygame.mouse.get_pos()[1]
+                Build.onMouseRelease(mouseX, mouseY)
 
             """if(event.button == 4):
                 if(Zoom > 0.5):
@@ -125,16 +139,23 @@ while not done:
     screen.blit(background, (0,0))
 
 
-    if(isPaused == False):
-        Map.tick()
-        City.tick()
-        PathFinding.tick()
+    if(GameState == GAME_STATE_MENU):
+        aMainMenu.tick()
+        aMainMenu.render(screen)
+
+    if(GameState == GAME_STATE_GAME):
+
+        if(isPaused == False):
+            Map.tick()
+            City.tick()
+            PathFinding.tick()
 
 
-    Map.render(screen)
-    Build.render(screen)
-    #PathFinding.render(screen)
-    UI.render(screen)
+        Map.render(screen)
+        Build.render(screen)
+        #PathFinding.render(screen)
+        UI.render(screen)
+
     
     fps = font.render(str(int(clock.get_fps())), True, (0, 0, 0))
     screen.blit(fps, (screen.get_width() - 45,5))
