@@ -45,13 +45,6 @@ def init():
                     gmapLeft[val].append((x,y))
                 else:
                     gmapLeft[val] = [(x,y)]
-    
-    print("0: " + str(len(gmapLeft['0'])))
-    print("1: " + str(len(gmapLeft['1'])))
-    print("2: " + str(len(gmapLeft['2'])))
-    print("3: " + str(len(gmapLeft['3'])))
-    print("4: " + str(len(gmapLeft['4'])))
-    print("5: " + str(len(gmapLeft['5'])))
             
 
 
@@ -238,11 +231,13 @@ def tick():
         if(Population > LastPopMilestone + 100):
             LastPopMilestone += 100
             #print("new building")
+            #while(not maptest()):
+            #    growthattempts+=1
+            #    None
+            #b = maptest2()
             while(not maptest()):
                 growthattempts+=1
                 None
-            #b = maptest2()
-
 
 
 def RefreshPopulationRates():

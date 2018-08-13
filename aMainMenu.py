@@ -11,7 +11,9 @@ font = None
 def render(screen):
     global buttons
     global font
-    Name = ImageUtil.get_image("menu-name-white")
+    Name = ImageUtil.get_image("menu-name-black")
+    Back = ImageUtil.get_image("menu-back")
+    screen.blit(Back, (0,0))
     screen.blit(Name, (screen.get_width()/2-(Name.get_width()/2), 100))
     for b in buttons:
         button = buttons[b]

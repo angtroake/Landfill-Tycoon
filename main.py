@@ -46,6 +46,7 @@ ImageUtil.create_image("truck1-BL", "res/trucks/truck1/truck1BL.png")
 ImageUtil.create_image("truck1-BR", "res/trucks/truck1/truck1BR.png")
 ImageUtil.create_image("menu-name-white", "res/mainmenu/name-white.png")
 ImageUtil.create_image("menu-name-black", "res/mainmenu/name-black.png")
+ImageUtil.create_image("menu-back", "res/mainmenu/menu-back.png")
 
 SoundUtil.create_sound("click", "res/sound/Click.ogg")
 
@@ -153,7 +154,7 @@ while not done:
 
         Map.render(screen)
         Build.render(screen)
-        #PathFinding.render(screen)
+        PathFinding.render(screen)
         UI.render(screen)
 
     
