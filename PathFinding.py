@@ -22,7 +22,7 @@ VehicleTypes = {}
 finder = AStarFinder()
 
 CurrentTick = 0
-MaxTick = 40
+MaxTick = 0
 
 
 def initVehicleTypes():

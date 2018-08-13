@@ -18,7 +18,8 @@ def onMouseClick(x,y):
         initRoadBuild(pos)
     elif buildMode == BUILD_MODE_LANDFILL:
         initLandfillBuild(pos)
-
+    elif buildMode == BUILD_MODE_DELETE:
+        handleDelete(pos)
 
 def render(screen):
     global buildStart
@@ -150,10 +151,22 @@ def handleBuildLandfill(pos):
         if canBuild:            
             for block in ListBlocks:
                 Map.setTile(block[0],block[1], Map.TILES["landfill"])
-            Company.Money -= landfillArea*COST_OF_LANDFILL
+                Map.GMAP[block[0]][block[1]] = "00"
+                Company.Money -= landfillArea*COST_OF_LANDFILL
 
         buildStart[0] = None
-
-
+#---------------------------------------- BULLDOZE METHODS -----------------------------------------------------------------
+def handleDelete(pos):
+    
+    tileV = Map.MAP[pos[0]][pos[1]]
+    if(Map.isHouseTile(pos[0],pos[1])): #generated building
+        Map.setTile(pos[0],pos[1],"1") # set to grass
+        Map.GMAP[pos[0]][pos[1]] = "0"
+    elif(tileV == "20"): #generated road
+        Map.setTile(pos[0],pos[1],"2") # set to road to be
+        Map.GMAP[pos[0]][pos[1]] = "0"
+    elif(tileV == "22"):
+        Map.setTile(pos[0],pos[1],"1") # set to grass
+        Map.GMAP[pos[0]][pos[1]] = "0"
 
 
