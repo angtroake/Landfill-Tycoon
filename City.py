@@ -3,8 +3,11 @@ from Constants import *
 import random
 import datetime
 
+gmapLeft = {}
 
-AmoutOfTrash = 40
+
+
+AmoutOfTrash = 0
 Population = 1000
 
 #POPULATION * FERTILEAMOUNT(8.2)(constant) / 100
@@ -18,6 +21,8 @@ LastPopChange = None
 
 LastPopMilestone = 1000
 
+GrowthPossible = True
+
 
 #city generated tiles prefixed with 2
 #x and y of selected tile
@@ -29,25 +34,121 @@ surTiles = [None] * 100
 
 
 
+def init():
+    global gmapLeft
+    GMAP = Map.GMAP
+    for x in range(0, len(GMAP)):
+        for y in range(0, len(GMAP)):
+            if(Map.getTile(x,y) == Map.TILES["grass"] or Map.getTile(x,y) == Map.TILES["road-to-be"]):
+                val = GMAP[x][y]
+                if(val in gmapLeft):
+                    gmapLeft[val].append((x,y))
+                else:
+                    gmapLeft[val] = [(x,y)]
+    
+    print("0: " + str(len(gmapLeft['0'])))
+    print("1: " + str(len(gmapLeft['1'])))
+    print("2: " + str(len(gmapLeft['2'])))
+    print("3: " + str(len(gmapLeft['3'])))
+    print("4: " + str(len(gmapLeft['4'])))
+    print("5: " + str(len(gmapLeft['5'])))
+            
+
+
+
 def getSurroundingtiles(X,Y):
-        surTiles = [None] * 100
-        #North
-        surTiles[0]  = X+1
-        surTiles[1]  = Y
-        surTiles[2]  = Map.GMAP[surTiles[0]][surTiles[1]]
-        #East
-        surTiles[10] = X
-        surTiles[11] = Y+1
-        surTiles[12]  = Map.GMAP[surTiles[10]][surTiles[11]]
-        #South
-        surTiles[20] = X-1
-        surTiles[21] = Y
-        surTiles[22]  = Map.GMAP[surTiles[20]][surTiles[21]]
-        #West
-        surTiles[30] = X
-        surTiles[31] = Y-1
-        surTiles[32]  = Map.GMAP[surTiles[30]][surTiles[31]]
-        return surTiles
+    surTiles = [None] * 100
+    #North
+    surTiles[0]  = X+1
+    surTiles[1]  = Y
+    surTiles[2]  = Map.GMAP[surTiles[0]][surTiles[1]]
+    #East
+    surTiles[10] = X
+    surTiles[11] = Y+1
+    surTiles[12]  = Map.GMAP[surTiles[10]][surTiles[11]]
+    #South
+    surTiles[20] = X-1
+    surTiles[21] = Y
+    surTiles[22]  = Map.GMAP[surTiles[20]][surTiles[21]]
+    #West
+    surTiles[30] = X
+    surTiles[31] = Y-1
+    surTiles[32]  = Map.GMAP[surTiles[30]][surTiles[31]]
+    return surTiles
+
+def doesSurroundHaveRoad(x, y):
+    for x1 in range(x-1, x+3):
+        for y1 in range(y-1, y+3):
+            if(x1 is not x and y1 is not y):
+                tile = Map.getTile(x1,y1)
+                if(tile == Map.TILES["user-road"] or tile == Map.TILES["road"]):
+                    return True
+
+    return False
+
+
+def maptest2():
+    global gmapLeft
+    GMAP = Map.GMAP
+    MAP = Map.MAP
+
+    gmapVal = 99
+
+    for i in range(0,6):
+        if(len(gmapLeft[str('0')]) > 0):
+            gmapVal = str(i)
+            break
+
+    if(gmapVal != 99):
+        tilesLeft = gmapLeft[gmapVal]
+
+        print(gmapVal + ": " + str(len(gmapLeft[gmapVal])))
+
+        tileSelected = (0,0)
+        isgood = False
+
+        whilei = 0
+        while(isgood == False):
+            #print("While: " + str(whilei))
+            whilei += 1
+            if(whilei >= 100):
+                if(int(gmapVal) < 5):
+                    gi = int(gmapVal) + 1
+                    gmapVal = str(gi)
+                    tilesLeft = gmapLeft[gmapVal]
+                    
+                    whilei = 0
+                    print("trying: " + str(gi))
+                else:
+                    None
+                    #return False
+            tileSelected = random.choice(tilesLeft)
+            #print(tileSelected)
+            tileSelectedVal = Map.getTile(tileSelected[0], tileSelected[1])
+            if(tileSelectedVal == Map.TILES["grass"] or tileSelectedVal == Map.TILES["road-to-be"]):
+                #if(doesSurroundHaveRoad(tileSelected[0], tileSelected[1])):
+                    isgood = True
+        
+
+        currentMapValue = Map.getTile(tileSelected[0], tileSelected[1])
+        newValue = None
+        if(currentMapValue == Map.TILES["road-to-be"]):
+            newValue = Map.TILES["road"]
+        elif(currentMapValue == Map.TILES["grass"]):
+            newValue = str(random.randint(0,2) + 10)
+        else:
+            return False
+        
+        Map.setTile(tileSelected[0], tileSelected[1], newValue)
+        tilesLeft.remove(tileSelected)
+
+
+
+
+
+        
+
+
 def maptest():
     btilesX = []
     btilesY = []
@@ -118,6 +219,8 @@ def tick():
     global Population
     global PopChangePerSecond
     global LastPopMilestone
+    global GrowthPossible
+    global AmoutOfTrash
 
     if(LastPopChange == None):
         LastPopChange = datetime.datetime.now()
@@ -126,6 +229,7 @@ def tick():
     
     currentTime = datetime.datetime.now()
     if((currentTime - LastPopChange).total_seconds() >= SECONDS_BETWEEN_GROWTH):
+        AmoutOfTrash = AmoutOfTrash + (Population * RATE_OF_TRASH/5000)
         Population += PopChangePerSecond
         LastPopChange = currentTime
         if(Population > LastPopMilestone + 100):
@@ -133,6 +237,7 @@ def tick():
             #print("new building")
             while(not maptest()):
                 None
+            #b = maptest2()
 
 
 
@@ -146,5 +251,5 @@ def RefreshPopulationRates():
     BirthRate = Population * FERTILE_CONSTANT / 100
     DeathRate = Population * Map.Pollution / 100 / DEATH_CONSTANT
 
-    PopChangePerSecond = BirthRate - DeathRate
+    PopChangePerSecond = (BirthRate - DeathRate)/20
 

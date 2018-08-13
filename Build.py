@@ -150,7 +150,7 @@ def handleBuildLandfill(pos):
         if canBuild:            
             for block in ListBlocks:
                 Map.setTile(block[0],block[1], Map.TILES["landfill"])
-            Company.Money -= landfillArea*COST_OF_LANDFILL
+                Company.Money -= COST_OF_LANDFILL
 
         buildStart[0] = None
 

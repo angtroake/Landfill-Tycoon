@@ -8,15 +8,17 @@ import Map
 import ImageUtil
 from Constants import *
 import City
+import Company
+import datetime
 
 
 
-#                                 0                    1          2           3          4        5        6        
-#    STRUCTURE:     [(currentCordX, currentCoordY), typeID, targetPosNode, Capacity, AmountFill, path, pathindex, ]
+#                                 0                    1          2           3          4        5        6       
+#    STRUCTURE:     [(currentCordX, currentCoordY), typeID, targetPosNode, Capacity, AmountFill, path, pathindex]
 LiveVehicles = []
 
-#                           0       1        2(0=TL,1=TR,2=BR,3=BL)
-#    STRUCTURE:     [id, (name, capacity, images)]
+#                           0       1        2(0=TL,1=TR,2=BR,3=BL)     3         4
+#    STRUCTURE:     [id, (name, capacity, images,                     cost, monthly-cost)]
 VehicleTypes = {}
 
 finder = AStarFinder()
@@ -25,13 +27,16 @@ CurrentTick = 0
 MaxTick = 40
 
 
+LastBillTime = None
+
+
 def initVehicleTypes():
     global VehicleTypes
     with open("vehicle.json") as jsonFile:
         tempData = json.load(jsonFile)
         for val in tempData:
             images = (tempData[val]["image-name-TL"], tempData[val]["image-name-TR"], tempData[val]["image-name-BR"], tempData[val]["image-name-BL"])
-            VehicleTypes[tempData[val]["id"]] = (tempData[val]["name"], tempData[val]["capacity"], images)
+            VehicleTypes[tempData[val]["id"]] = (tempData[val]["name"], tempData[val]["capacity"], images, tempData[val]["cost"], tempData[val]["monthly-cost"])
 
 
 def createVehicle(id):
@@ -56,6 +61,11 @@ def tick():
     global CurrentTick
     global VehicleTypes
     global MaxTick
+    global Mon
+    global LastBillTime
+
+    TotalMonthlyCost = 0
+
     if(CurrentTick >= MaxTick):
         for vehicle in LiveVehicles:
             currentpos = vehicle[0]
@@ -64,16 +74,20 @@ def tick():
             endpos = vehicle[2]
             vehicleType = VehicleTypes[vehicle[1]]
             #print("Current Pos: " + str(currentpos) + "   End Pos: " + str(endpos) + "   Path Length: " + str(len(path)) + "   Path Index: " + str(pathindex))
-            
+
+
+            TotalMonthlyCost += vehicleType[4]
 
             #ADD GARBAGE IF NEXT TO HOUSE
             if(vehicle[4] < vehicleType[1]):
                 if(Map.isHouseTile(currentpos[0]+1,currentpos[1]) or Map.isHouseTile(currentpos[0]-1, currentpos[1]) or Map.isHouseTile(currentpos[0], currentpos[1]-1) or Map.isHouseTile(currentpos[0], currentpos[1]+1)):
                     #print("HOUSE NEXT TO")
                     rand = random.randint(0, RANDOM_CHANCE_OF_GARBAGE_GET)
-                    if(rand == 0 and City.AmoutOfTrash > 0 ):
+                    if(rand == 0 and City.AmoutOfTrash >= 1 ):
                         vehicle[4] += 1
-                        print("Trash: " + str(vehicle[4]) + "      CITY TRASH: " + str(City.AmoutOfTrash))
+                        Company.Money += 10
+                        City.AmoutOfTrash -= 1
+                        #print("Trash: " + str(vehicle[4]) + "      CITY TRASH: " + str(City.AmoutOfTrash))
 
 
             
@@ -82,22 +96,36 @@ def tick():
 
             #IF IT HAS REACHED THE END OF ITS RANDOM PATH GENERATE A NEW ONE AND DUMP TRASH IF HAS SOME
             if((currentpos[0] == endpos[0] and currentpos[1] == endpos[1]) or endpos[0] == None or len(path) <= 0 or pathindex >= len(path)):
-                print(Map.TILES["landfill"])
+                
+                #IF AT LANDFILL
                 if(Map.getTile(currentpos[0], currentpos[1]) == Map.TILES["landfill"]):
-                    None
-
-                if(vehicle[4] >= vehicleType[1]):
-                    newfill = getNewLandfillTarget()
-                    if(newfill == None):
-                        vehicle[2] = getNewRoadTarget()
-                        print("NO Landfill")
+                    landfill = Map.Landfillgroups[Map.LandfillTiles[(currentpos[0],currentpos[1])]]
+                    spaceLeft = landfill[1] - landfill[0]
+                    if spaceLeft >= vehicle[4]:
+                        landfill[0] += vehicle[4]
+                        vehicle[4] = 0
                     else:
-                        vehicle[2] = newfill
-                        print("yay landfill!")
-                else:
-                    vehicle[2] = getNewRoadTarget()
-                startpos = currentpos
-                vehicle[5] = getPath(startpos, vehicle[2])
+                        landfill += spaceLeft
+                        vehicle[4] -= spaceLeft
+
+                endpos = None
+                path = None
+                while(endpos == None and path == None):
+                    if(vehicle[4] >= vehicleType[1]):
+                        newfill = getNewLandfillTarget()
+                        if(newfill == None):
+                            vehicle[2] = getNewRoadTarget()
+                            #print("NO Landfill")
+                        else:
+                            vehicle[2] = newfill
+                            #print("yay landfill!")
+                    else:
+                        vehicle[2] = getNewRoadTarget()
+                    startpos = currentpos
+                    path = getPath(startpos, vehicle[2])
+                    print(path)
+
+                vehicle[5] = path
                 vehicle[6] = 0
                 Map.testTruckEnd = endpos
                 continue
@@ -106,6 +134,17 @@ def tick():
             #SET POSIITON TO NEXT POOSITION IN PATH
             vehicle[0] = [path[pathindex][0], path[pathindex][1]]
             vehicle[6] += 1
+
+
+        #MONTHLY COSTS
+        currentTime = datetime.datetime.now()
+        if(LastBillTime == None):
+            LastBillTime = currentTime
+
+        if((currentTime - LastBillTime).total_seconds() >= SECONDS_PER_MONTH):
+            Company.Money -= TotalMonthlyCost
+            LastBillTime = currentTime
+
 
         CurrentTick = 0
     else:
@@ -137,8 +176,9 @@ def renderVehicle(vehicle, screen):
         elif(nextpos[1] < currentpos[1]):
             image = ImageUtil.get_image(images[0])
         
-        isoPos[0] += (TILE_WIDTH/2 - image.get_width()/2)
-        isoPos[1] -= image.get_height()/2
+    isoPos[0] += (TILE_WIDTH/2 - image.get_width()/2)
+    isoPos[1] -= image.get_height()/2
+    
             
     screen.blit(image, isoPos)
 

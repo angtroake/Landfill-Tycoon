@@ -68,7 +68,7 @@
     },
     "23": {
         "name": "landfill",
-        "id": "23",
+        "id": 23,
         "image-name": "landfill",
         "is-user-made": true,
         "is-house": false

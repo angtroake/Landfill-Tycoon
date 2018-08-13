@@ -6,6 +6,9 @@ import ImageUtil
 import json
 import copy
 import PathFinding
+from scipy import ndimage
+import numpy as np
+from skimage import measure
 
 scrollX = 0
 scrollY = 0
@@ -16,20 +19,21 @@ font = None
 
 MAP = None
 PATHMAP = None
+GMAP = None
 
 #DICT    {[x,y]: groupid}
 LandfillTiles = {}
 
-#DICT        {id: (amountfill, maxamount)}
+#DICT        {id: [amountfill, maxamount, (centerX, centerY)]}
 Landfillgroups = {}
+
+LandfillAdded = False
 
 TileData = None
 #          name: id
 TILES = {}
 
 buildMode = 0
-
-testTruckEnd = [None, None]
 
 
 Pollution = 0
@@ -123,11 +127,13 @@ def setTile(x, y, tileId):
     global MAP
     global PATHMAP
     global LandfillTiles
+    global LandfillAdded
     MAP[x][y] = str(tileId)
     if(str(tileId) == '20' or str(tileId) == '22'):
         PATHMAP[y][x] = '1'
     elif(str(tileId) == '23'):
         LandfillTiles[(x,y)] = None
+        LandfillAdded = True
         PATHMAP[y][x] = '2'
     else:
         PATHMAP[y][x] = '0'
@@ -168,9 +174,6 @@ def render(screen):
                 color = (100,100,100)
                 image = getTileImage(cellX, cellY)
                 #renders tile to screen
-                if(testTruckEnd[0] == None):
-                    if(cellX == testTruckEnd[0] and cellY == testTruckEnd[1]):
-                        image = ImageUtil.get_image("temp")
 
                 if(image.get_height()!=TILE_HEIGHT):
                     
@@ -181,7 +184,7 @@ def render(screen):
 
                 #render build priority
                 #bupr = font.render(str(GMAP[cellX][cellY]), True, (0, 0, 0))
-                #screen.blit(bupr, (posX-16,posY-16))
+                #screen.blit(bupr, (posX+32,posY-16))
                 
                 #if in build mode enables the grid
                 if(buildMode != 0):
@@ -196,11 +199,9 @@ def render(screen):
                 if(vehicle != False):
                     PathFinding.renderVehicle(vehicle, screen)
 
-    #-------------------------------------------------------------------------------------------
 
 
-
-    #------------------------- MOUSE TILE HOVER ------------------------------------------------
+    #-------- MOUSE TILE HOVER ----
 
     mousePos = pygame.mouse.get_pos()
 
@@ -218,33 +219,94 @@ def render(screen):
 
         mouseCoord = mousePosToCoord(hoverPosX, hoverPosY)
         textpos = font.render("X:" + str(mouseCoord[0]) + "  Y:" + str(mouseCoord[1]), True, (0, 0, 0))
-        screen.blit(textpos, (50,200))
+        screen.blit(textpos, (5,70))
+    
 
-    #---------------------------------------------------------------------------------------------
+    #RENDER TEXT FOR LANDFILLS
+    for Landfill in Landfillgroups:
+        pos = getScreenPositionOfCoord(Landfillgroups[Landfill][2][0], Landfillgroups[Landfill][2][1])
+        textLandfill = font.render("Landfill", True, (255,255,255))
+        textAmountFill = font.render(str(Landfillgroups[Landfill][0]) + "/" + str(Landfillgroups[Landfill][1]), True, (255,255,255))
+        screen.blit(textLandfill, (pos[0], pos[1]-40))
+        screen.blit(textAmountFill, (pos[0], pos[1]))
 
-#TODO Adjust render limit when testing finished
-#TODO FIX CURSOR ON ZOOM     
+    
+
+
+    #-----------------------------------------               END      RENDER           ----------------------------------------------------
+
+
 
 
 def tick():
     global LandfillTiles
-    for pos in LandfillTiles:
-        #print(pos)
-        #print(LandfillTiles[pos])
-        None
+    global Landfillgroups
+    global LandfillAdded
+    if(LandfillAdded):
+        print("Land FIll Added")
+        landfillLogic2()
+        LandfillAdded = False
     
 
 
 
+#DICT   LandfillTiles    {[x,y]: groupid}
+#DICT        {id: [amountfill, maxamount, (centerX, centerY)]}
 
 
-def landfillLogic():
+def landfillLogic2():
+    global MAP
     global LandfillTiles
     global Landfillgroups
 
+    tempMap = copy.deepcopy(MAP)
+    for x in range(0, MAP_WIDTH):
+        for y in range(0, MAP_HEIGHT):
+            if tempMap[x][y] != '23':
+                tempMap[x][y] = '0'
 
-    linked = []
+    array = np.array(tempMap)
+    img_labled = measure.label(array, connectivity=1)
+
+    idx = [np.where(img_labled == label) for label in np.unique(img_labled) if label]
+
+
+    groups = []
+    newgroup = []
+
+    for lols in idx:
+        for i in range(0, len(lols[0])):
+            newgroup.append((lols[0][i], lols[1][i]))
+        groups.append(newgroup)
+        newgroup = []
     
-    #expanding current ones
-    for tile in LandfillTiles:
-        None
+    
+    for group in groups:
+        groupid = None
+        minX = None
+        minY = None
+        maxX = None
+        maxY = None
+        for tile in group:
+            if(LandfillTiles[tile] != None):
+                groupid = LandfillTiles[tile]
+                break
+        minX = group[0][0]
+        minY = group[0][1]
+        maxX = group[len(group)-1][0]
+        maxY = group[len(group)-1][1]
+        
+        if(groupid != None):
+            for tile in group:
+                LandfillTiles[tile] = groupid
+            Landfillgroups[groupid][1] = len(group)*GARBAGE_PER_LANDFILL_TILE
+            Landfillgroups[groupid][2] = (minX + (maxX-minX)/2, minY + (maxY-minY)/2)
+            
+        else:
+            groupid = len(Landfillgroups)
+            for tile in group:
+                LandfillTiles[tile] = groupid
+            Landfillgroups[groupid] = [0,len(group)*GARBAGE_PER_LANDFILL_TILE, (minX + (maxX-minX)/2, minY + (maxY-minY)/2)]
+
+            
+

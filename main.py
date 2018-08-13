@@ -6,6 +6,7 @@ import Build
 import City
 import UI
 import PathFinding
+import SoundUtil
 
 from Constants import *
 from pygame.locals import *
@@ -34,6 +35,8 @@ ImageUtil.create_image("truck1-TR", "res/trucks/truck1/truck1TR.png")
 ImageUtil.create_image("truck1-BL", "res/trucks/truck1/truck1BL.png")
 ImageUtil.create_image("truck1-BR", "res/trucks/truck1/truck1BR.png")
 
+SoundUtil.create_sound("click", "res/sound/Click.ogg")
+
 
 Map.loadMap()
 Map.loadPathFindingMap()
@@ -41,6 +44,8 @@ Map.scrollX = 1000
 Map.scrollY = -200
 Map.loadGMap()
 Map.loadTileData()
+
+City.init()
 
 PathFinding.initVehicleTypes()
 PathFinding.createVehicle(0)
@@ -125,7 +130,7 @@ while not done:
     UI.render(screen)
     
     fps = font.render(str(int(clock.get_fps())), True, (0, 0, 0))
-    screen.blit(fps, (50,50))
+    screen.blit(fps, (screen.get_width() - 45,5))
     pygame.display.flip()
 
     clock.tick(240)
