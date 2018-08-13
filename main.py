@@ -158,16 +158,15 @@ while not done:
 
         Map.render(screen)
         Build.render(screen)
-        PathFinding.render(screen)
         UI.render(screen)
         Notification.render(screen)
 
     
-    fps = font.render(str(int(clock.get_fps())), True, (0, 0, 0))
-    screen.blit(fps, (screen.get_width() - 45,5))
+    #fps = font.render(str(int(clock.get_fps())), True, (0, 0, 0))
+    #screen.blit(fps, (screen.get_width() - 45,5))
     pygame.display.flip()
 
-    clock.tick(240)
+    clock.tick(60)
 
 pygame.quit()
 sys.exit()

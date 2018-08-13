@@ -57,6 +57,10 @@ def onMouseRelease(x,y):
         handleBuildRoad(pos)
     elif(buildMode == BUILD_MODE_LANDFILL):
         handleBuildLandfill(pos)
+    elif(buildMode == BUILD_MODE_FIRE):
+        handleIncenerator(pos)
+    elif(buildMode == BUILD_MODE_RECYCLE):
+        handleRecycle(pos)
 
 
 
@@ -167,8 +171,48 @@ def handleDelete(pos):
             Company.Money -= costToDelete
             if(Map.isHouseTile(pos[0], pos[1], original=True) or Map.ORIGINAL_MAP[pos[0]][pos[1]] == Map.TILES["road"]):
                 Map.setTile(pos[0], pos[1], Map.TILES["grass"])
+            if(tileV == Map.TILES["fire"]):
+                landfill = landfillNextToPos(tileV)
+                if(landfill != None):
+                    Map.Landfillgroups[Map.LandfillTiles[landfill]][3] -= 1
+            if(tileV == Map.TILES["recycle"]):
+                landfill = landfillNextToPos(tileV)
+                if(landfill != None):
+                    Map.Landfillgroups[Map.LandfillTiles[landfill]][4] -= 1
             
                 
         
+#---------------------------------------  BUILDING HANDLE -------------------------------------
+def handleIncenerator(pos):
+    tile = Map.getTile(pos[0], pos[1])
+    if(tile in VALID_CONSTRUCTION_SPOTS):
+        landfill = landfillNextToPos(pos)
+        if(landfill != None):
+            group = Map.Landfillgroups[Map.LandfillTiles[landfill]]
+            if(Company.Money >= COST_OF_BURNER):
+                group[3] += 1
+                Map.setTile(pos[0], pos[1], Map.TILES["fire"])
 
 
+def handleRecycle(pos):
+    tile = Map.getTile(pos[0], pos[1])
+    if(tile in VALID_CONSTRUCTION_SPOTS):
+        landfill = landfillNextToPos(pos)
+        if(landfill != None):
+            group = Map.Landfillgroups[Map.LandfillTiles[landfill]]
+            if(Company.Money >= COST_OF_RECYCLE):
+                group[3] += 1
+                Map.setTile(pos[0], pos[1], Map.TILES["recycle"])
+
+
+def landfillNextToPos(pos):
+    if(Map.getTile(pos[0]-1,pos[1]) == Map.TILES["landfill"]):
+        return (pos[0]-1,pos[1])
+    elif(Map.getTile(pos[0]+1,pos[1]) == Map.TILES["landfill"]):
+        return (pos[0]+1,pos[1])
+    elif(Map.getTile(pos[0],pos[1]-1) == Map.TILES["landfill"]):
+        return (pos[0],pos[1]-1)
+    elif(Map.getTile(pos[0],pos[1]+1) == Map.TILES["landfill"]):
+        return (pos[0],pos[1]+1)
+    else:
+        return None
