@@ -242,8 +242,8 @@ def getNewLandfillTarget():
 
     if(any('2' in sub for sub in RoadMap)):
         print("there is a 2")
-        while RoadMap[returns[0]][returns[1]] != '2':
-            returns = random.choice([(j,i) for i, row in enumerate(RoadMap) for j, val in enumerate(row) if val=='2'])
+        returns = random.choice([(j,i) for i, row in enumerate(RoadMap) for j, val in enumerate(row) if val=='2'])
+        print(returns)
     else:
         return None
 

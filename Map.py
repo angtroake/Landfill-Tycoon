@@ -262,11 +262,8 @@ def tick():
     global Landfillgroups
     global LandfillAdded
     global lastLandfillTick
-<<<<<<< HEAD
     global blackholemass
-=======
     global Pollution
->>>>>>> 27800feefdb3f3f10a8d5d7a547e6f0dbd2429fd
     if(LandfillAdded):
         print("Land FIll Added")
         landfillLogic2()

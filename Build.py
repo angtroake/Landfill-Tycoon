@@ -7,16 +7,13 @@ buildMode = 0
 
 buildStart = [None, None]
 
-<<<<<<< HEAD
 blackholepos = (0 , 0)
-=======
 font = None
 
 
 def init():
     global font
     font = pygame.font.Font(None, 25)
->>>>>>> 27800feefdb3f3f10a8d5d7a547e6f0dbd2429fd
 
 def onMouseClick(x,y):
     global buildStart
