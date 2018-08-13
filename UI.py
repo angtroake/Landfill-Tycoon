@@ -7,6 +7,7 @@ import Build
 import City
 import SoundUtil
 import PathFinding
+import Notification
 
 icons = []
 activeIcon = None
@@ -25,7 +26,7 @@ def initUI(functionPause):
 
     icons.append(["menu-pause", 0, (0,0), functionPause, True, False, None])
     icons.append(["menu-city", 1, (UI_ICON_SIZE*2, 0), openMenu, False, False, 1])
-    icons.append(["menu-company",2,  (UI_ICON_SIZE*3, 0),City.maptest , False, False, 2])
+    icons.append(["menu-company",2,  (UI_ICON_SIZE*3, 0), Notification.addNotification , False, False, "Citizens worry as full garbage trucks roam the city without a landfill to go to!"])
     icons.append(["menu-build-road", 3, (UI_ICON_SIZE*5, 0), setBuildMode, True, False, BUILD_MODE_ROAD])
     icons.append(["menu-build-landfill", 4, (UI_ICON_SIZE*6, 0), setBuildMode, True, False, BUILD_MODE_LANDFILL])
     icons.append(["menu-trucks", 5, (UI_ICON_SIZE*10, 0), buyTruck, False, True, 0])
@@ -100,7 +101,7 @@ def mouseClick(x,y):
                     pauseActive = not pauseActive
                     setBuildMode(0, None)
 
-                if(i[3] == openMenu or i[3] == buyTruck):
+                if(i[3] == openMenu or i[3] == buyTruck or i[3] == Notification.addNotification):
                     i[3](i[6])
                     return True
                 if(i[3] == setBuildMode):

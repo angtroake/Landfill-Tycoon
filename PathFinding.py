@@ -10,6 +10,7 @@ from Constants import *
 import City
 import Company
 import datetime
+import Notification
 
 
 
@@ -116,6 +117,7 @@ def tick():
                         if(newfill == None):
                             vehicle[2] = getNewRoadTarget()
                             #print("NO Landfill")
+                            Notification.addNotification("Citizens worry as full garbage trucks roam the city without a landfill to go to!")
                         else:
                             vehicle[2] = newfill
                             #print("yay landfill!")

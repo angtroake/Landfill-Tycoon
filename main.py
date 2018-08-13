@@ -8,6 +8,7 @@ import City
 import UI
 import PathFinding
 import SoundUtil
+import Notification
 
 from Constants import *
 from pygame.locals import *
@@ -88,6 +89,8 @@ def togglePauseGame():
 
 UI.initUI(togglePauseGame)
 
+Notification.init()
+
 
 
 while not done:
@@ -150,12 +153,14 @@ while not done:
             Map.tick()
             City.tick()
             PathFinding.tick()
+            Notification.tick()
 
 
         Map.render(screen)
         Build.render(screen)
         PathFinding.render(screen)
         UI.render(screen)
+        Notification.render(screen)
 
     
     fps = font.render(str(int(clock.get_fps())), True, (0, 0, 0))
