@@ -191,9 +191,6 @@ def maptest():
             elif(Map.MAP[surtiles[newtileX]][surtiles[newtileY]] == "2"):
                 Map.setTile(surtiles[newtileX],surtiles[newtileY],"20")
                 Map.GMAP[surtiles[newtileX]][surtiles[newtileY]] = "0"
-            else:
-                Map.setTile(surtiles[newtileX],surtiles[newtileY],"3")
-                Map.GMAP[surtiles[newtileX]][surtiles[newtileY]] = "0"
     surtilesInvalid = 0
     return True
     #put all tiles avalible to be built on into array

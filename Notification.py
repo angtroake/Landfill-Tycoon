@@ -9,6 +9,7 @@ NotificationsToPost = []
 NotificationPlaying = False
 CurrentNotification = None
 
+maxBuffer = 5
 
 font = None
 
@@ -83,5 +84,7 @@ def tick():
 
 
 def addNotification(text):
+    global maxBuffer
     global NotificationsToPost
-    NotificationsToPost.append(text)
+    if(len(NotificationsToPost) < maxBuffer):
+        NotificationsToPost.append(text)

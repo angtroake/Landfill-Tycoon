@@ -87,6 +87,15 @@ def render(screen):
         screen.blit(rect, (0,0))
 
 
+    mousePos = pygame.mouse.get_pos()
+    if(mousePos[0] > icons[3][2][0] and mousePos[0] < icons[3][2][0] + UI_ICON_SIZE):
+        if(mousePos[1] > icons[3][2][1] and mousePos[1] < icons[3][2][1] + UI_ICON_SIZE):
+            color = (255,255,255)
+            if(Company.Money < PathFinding.VehicleTypes[0][3]):
+                color = (255,0,0)
+            monText = font.render(str(PathFinding.VehicleTypes[0][3]) + "$", True, color)
+            screen.blit(monText, (mousePos[0], mousePos[1] + 15))
+
     moneytext = font.render(str(Company.Money) + "$", True, (0, 0, 0))
     
     poeplestr = "Population: " + str(int(City.Population))
@@ -167,8 +176,16 @@ def setBuildMode(modeID, icon):
 
 def openMenu(index):
     global buildingMenuOpen
+    global activeIcon
     if(index == 7):
-        buildingMenuOpen = not buildingMenuOpen
+        if(buildingMenuOpen):
+            activeIcon = None
+            Build.buildMode = 0
+            Map.buildMode = 0
+            buildingMenuOpen = False
+        else:
+            buildingMenuOpen = True
+            
 
 
 def buyTruck(id):
